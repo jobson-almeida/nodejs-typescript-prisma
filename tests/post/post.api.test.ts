@@ -15,7 +15,7 @@ describe.skip('api tests', () => {
       url: "http://localhost:3000/posts",
       data: {
         text: "text",
-        authorId: "baf67b95-6345-4a40-bd4d-70402e8e6c4f" //use a user id valid from database
+        authorId: "baf67b95-6345-4a40-bd4d-70402e8e6c4f" // use a user id valid from database 
       },
       validateStatus: function (status) {
         return status >= 200 && status <= 404;
@@ -92,7 +92,7 @@ describe.skip('api tests', () => {
       url: `http://localhost:3000/posts/${id}`,
       data: {
         text: "other-text",
-        authorId: "baf67b95-6345-4a40-bd4d-70402e8e6c4f" //use a user id valid from database
+        authorId: "baf67b95-6345-4a40-bd4d-70402e8e6c4f" // use a user id valid from database
       },
       validateStatus: function (status) {
         return status >= 200 && status <= 404;
