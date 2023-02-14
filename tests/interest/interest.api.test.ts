@@ -18,7 +18,7 @@ describe.skip("interest api", () => {
         active: true
       },
       validateStatus: function (status) {
-        return status >= 200 && status < 300; // default
+        return status >= 200 && status < 299;
       },
     })
     expect(response.status).toBe(201)
@@ -30,7 +30,7 @@ describe.skip("interest api", () => {
       method: "get",
       responseType: "json",
       validateStatus: function (status) {
-        return status >= 200 && status < 300; // default
+        return status >= 200 && status < 299;
       },
     })
     const [interest] = response.data
@@ -49,7 +49,7 @@ describe.skip("interest api", () => {
       method: "get",
       responseType: "json",
       validateStatus: function (status) {
-        return status >= 200 && status < 300; // default
+        return status >= 200 && status < 299;
       },
     })
     expect(response.status).toBe(200)
@@ -61,7 +61,7 @@ describe.skip("interest api", () => {
       method: "get",
       responseType: "json",
       validateStatus: function (status) {
-        return status >= 200 && status <= 404; // default
+        return status >= 200 && status <= 404;
       },
     })
     expect(response.status).toBe(404)
@@ -73,7 +73,7 @@ describe.skip("interest api", () => {
       method: "delete",
       responseType: "json",
       validateStatus: function (status) {
-        return status >= 200 && status < 300; // default
+        return status >= 200 && status < 299;
       },
     })
     expect(response.status).toBe(204)
