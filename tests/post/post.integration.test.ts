@@ -18,7 +18,7 @@ describe('Post integration', () => {
   test('Should save post', async () => {
     const input = {
       text: `text${dataGenerate()}`,
-      authorId: "baf67b95-6345-4a40-bd4d-70402e8e6c4f" //use a valid database interest ID
+      authorId: "baf67b95-6345-4a40-bd4d-70402e8e6c4f" //use a valid database user ID
     }
     await postRepository.save(input)
     const postsFound = await postRepository.list()
@@ -61,7 +61,7 @@ describe('Post integration', () => {
       },
       data: {
         text: `text${dataGenerate()}`,
-        authorId: "baf67b95-6345-4a40-bd4d-70402e8e6c4f"  //use a valid database interest ID
+        authorId: "baf67b95-6345-4a40-bd4d-70402e8e6c4f" //use a valid database user ID
       }
     }
     await postRepository.update(updatePost)

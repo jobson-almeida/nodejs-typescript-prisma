@@ -21,7 +21,7 @@ describe.skip("Campaign api", () => {
       data: {
         name: `name ${dataGenerate()}`,
         text: `text ${dataGenerate()}`,
-        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"],
+        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"], //use a valid database interest ID
         startTime: now,
         endTime: after,
         status: true,
@@ -59,7 +59,7 @@ describe.skip("Campaign api", () => {
       data: {
         name: `name ${dataGenerate()}`,
         text: "",
-        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"],//use a valid database interest ID
+        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"], //use a valid database interest ID
         startTime: now,
         endTime: after,
         status: true,
@@ -97,7 +97,7 @@ describe.skip("Campaign api", () => {
       data: {
         name: `name ${dataGenerate()}`,
         text: `text ${dataGenerate()}`,
-        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"],//use a valid database interest ID
+        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"], //use a valid database interest ID
         startTime: "now",
         endTime: after,
         status: true,
@@ -116,7 +116,7 @@ describe.skip("Campaign api", () => {
       data: {
         name: `name ${dataGenerate()}`,
         text: `text ${dataGenerate()}`,
-        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"],//use a valid database interest ID
+        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"], //use a valid database interest ID
         startTime: now,
         endTime: "after",
         status: true,
@@ -135,7 +135,7 @@ describe.skip("Campaign api", () => {
       data: {
         name: `name ${dataGenerate()}`,
         text: `text ${dataGenerate()}`,
-        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"],//use a valid database interest ID
+        interests: ["6a61b062-ba16-44c1-b7a7-44bbfb2a8785"], //use a valid database interest ID
         startTime: after,
         endTime: now,
         status: true,
