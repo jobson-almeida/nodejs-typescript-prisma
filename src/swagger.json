@@ -1,0 +1,918 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Prisma TypeScript NodeJS API",
+    "description": "API in NodeJs using TypeScript with Prisma ORM",
+    "termsOfService": "http://localhost:3000/terms/",
+    "contact": {
+      "email": "jobson.ra@outlook.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "interests",
+      "description": "Everything about your interests"
+    },
+    {
+      "name": "users",
+      "description": "Everything about the users"
+    },
+    {
+      "name": "posts",
+      "description": "Everything about your posts"
+    },
+    {
+      "name": "campaigns",
+      "description": "Everything about the campaigns"
+    }
+  ],
+  "paths": {
+    "/interests": {
+      "post": {
+        "tags": [
+          "interests"
+        ],
+        "summary": "Create a new interest in system",
+        "requestBody": {
+          "description": "Interest object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "interest a"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Invalid name field content: set a name | Invalid active field content: set true or false"
+          },
+          "409": {
+            "description": "Interest already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "interests"
+        ],
+        "summary": "Get all interests in system",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/interests/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the interest that we want to match",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "interests"
+        ],
+        "summary": "Get interest with given ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Interest with id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Interest not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update interest with given ID",
+        "tags": [
+          "interests"
+        ],
+        "requestBody": {
+          "description": "Interest object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "interest a"
+                  },
+                  "active": {
+                    "type": "boolean",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Interest with new values of properties",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Invalid name field content: set a name | Invalid active field content: set true or false"
+          },
+          "404": {
+            "description": "Interest not found"
+          },
+          "409": {
+            "description": "Interest already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete interest with given ID",
+        "tags": [
+          "interests"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Delete Interest with id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "Interest not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create a new user in system",
+        "requestBody": {
+          "description": "Users object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "user"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "user@email.com"
+                  },
+                  "interests": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "5115a38e-d379-467e-a28d-fa81cf8165fe",
+                      "f82b0c8f-e53f-4ab0-96a2-9f6876477cb2"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Inactive interest | Invalid email | Invalid interest"
+          },
+          "404": {
+            "description": "Interest not found"
+          },
+          "409": {
+            "description": "User already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get all users in system",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the user that we want to match",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get user with given ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "User with id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user with given ID",
+        "tags": [
+          "users"
+        ],
+        "requestBody": {
+          "description": "User Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "user"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "user@email.com"
+                  },
+                  "interests": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "5115a38e-d379-467e-a28d-fa81cf8165fe",
+                      "f82b0c8f-e53f-4ab0-96a2-9f6876477cb2"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "User with new values of properties",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Inactive interest"
+          },
+          "404": {
+            "description": "User not found | Interest not found"
+          },
+          "409": {
+            "description": "User already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user with given ID",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Delete user with id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/posts": {
+      "post": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "Create a new post in system",
+        "requestBody": {
+          "description": "Posts object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "example": "text"
+                  },
+                  "authorId": {
+                    "type": "string",
+                    "example": "5115a38e-d379-467e-a28d-fa81cf8165fe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Invalid author"
+          },
+          "404": {
+            "description": "Author not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "Get all posts in system",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the post that we want to match",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "Get post with given ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Post with id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update post with given ID",
+        "tags": [
+          "posts"
+        ],
+        "requestBody": {
+          "description": "Post object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "post"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "post@email.com"
+                  },
+                  "interests": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "5115a38e-d379-467e-a28d-fa81cf8165fe",
+                      "f82b0c8f-e53f-4ab0-96a2-9f6876477cb2"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Post with new values of properties",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Post not found | Author not found"
+          },
+          "404": {
+            "description": "Post not found | Author not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete post with given ID",
+        "tags": [
+          "posts"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Delete post with id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "Post not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/campaigns": {
+      "post": {
+        "tags": [
+          "campaigns"
+        ],
+        "summary": "Create a new campaign in system",
+        "requestBody": {
+          "description": "Campaigns object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "example": "text"
+                  },
+                  "authorId": {
+                    "type": "string",
+                    "example": "5115a38e-d379-467e-a28d-fa81cf8165fe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Invalid name field content: set a name | Invalid text field content: set a text | Invalid interest field content: set a interest | Invalid active field content: set true or false | Invalid date | Invalid date range"
+          },
+          "409": {
+            "description": "Campaign already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "campaigns"
+        ],
+        "summary": "Get all campaigns in system",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/campaigns/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the campaign that we want to match",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "campaigns"
+        ],
+        "summary": "Get campaign with given ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Campaign with id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Campaign not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update campaign with given ID",
+        "tags": [
+          "campaigns"
+        ],
+        "requestBody": {
+          "description": "Campaign object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "name"
+                  },
+                  "text": {
+                    "type": "string",
+                    "example": "text"
+                  },
+                  "authorId": {
+                    "type": "string",
+                    "example": "5115a38e-d379-467e-a28d-fa81cf8165fe"
+                  },
+                  "interests": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "5115a38e-d379-467e-a28d-fa81cf8165fe",
+                      "f82b0c8f-e53f-4ab0-96a2-9f6876477cb2"
+                    ]
+                  },
+                  "startTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2022-11-30T17:38:11.613Z"
+                  },
+                  "endTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2032-11-30T17:38:11.613Z"
+                  },
+                  "status": {
+                    "type": "boolean",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Campaign with new values of properties",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "400": {
+            "description": "Invalid name field content: set a name | Invalid text field content: set a text | Invalid interest field content: set a interest | Invalid active field content: set true or false | Invalid date | Invalid date range"
+          },
+          "404": {
+            "description": "Campaign not found | Author not found | Interest not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete campaign with given ID",
+        "tags": [
+          "campaigns"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Delete campaign with id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "404": {
+            "description": "Campaign not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Interest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5a823c22-3409-4a09-87f7-a4bce3306b9f"
+          },
+          "name": {
+            "type": "string",
+            "example": "interest a"
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5a823c22-3409-4a09-87f7-a4bce3306b9f"
+          },
+          "name": {
+            "type": "string",
+            "example": "user"
+          },
+          "email": {
+            "type": "string",
+            "example": "user@email.com"
+          },
+          "interests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "5115a38e-d379-467e-a28d-fa81cf8165fe",
+              "f82b0c8f-e53f-4ab0-96a2-9f6876477cb2"
+            ]
+          }
+        }
+      },
+      "Post": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "f82b0c8f-e53f-4ab0-96a2-9f6876477cb2"
+          },
+          "text": {
+            "type": "string",
+            "example": "text text text"
+          },
+          "authorId": {
+            "type": "string",
+            "example": "5115a38e-d379-467e-a28d-fa81cf8165fe"
+          }
+        }
+      },
+      "Campaign": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "f82b0c8f-e53f-4ab0-96a2-9f6876477cb2"
+          },
+          "name": {
+            "type": "string",
+            "example": "campaign"
+          },
+          "text": {
+            "type": "string",
+            "example": "text text text"
+          },
+          "interests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "5115a38e-d379-467e-a28d-fa81cf8165fe",
+              "f82b0c8f-e53f-4ab0-96a2-9f6876477cb2"
+            ]
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-11-30T17:38:11.613Z"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2032-11-30T17:38:11.613Z"
+          },
+          "status": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      }
+    }
+  }
+}
