@@ -1,14 +1,18 @@
+import Post from "@/domain/entities/post"
 import PostRepository from "@/domain/repository/post-repository"
 import PrismaClientAdapter from "@/infra/database/prisma-client-adapter"
-import { Prisma, Post } from "@prisma/client"
 
 export default class PostRepositoryDatabase implements PostRepository {
-  constructor(readonly prismaClientAdapter: PrismaClientAdapter) { }
+  constructor(private readonly prismaClientAdapter: PrismaClientAdapter) { }
 
-  async save(data: Prisma.PostUncheckedCreateInput): Promise<void> {
+  async save(data: Post): Promise<void> {
     try {
       await this.prismaClientAdapter.prismaClient.post.create({
-        data
+        data: {
+          id: data.id,
+          text: data.text,
+          authorId: data.authorId
+        }
       })
     } finally {
       this.prismaClientAdapter.close
@@ -20,26 +24,55 @@ export default class PostRepositoryDatabase implements PostRepository {
       const postsFound = await this.prismaClientAdapter.prismaClient.post.findMany({
         orderBy: {
           createdAt: 'desc'
+        },
+        select: {
+          id: true,
+          text: true,
+          authorId: true,
+          createdAt: true,
+          updatedAt: true,
         }
       })
-      return postsFound
+
+      const posts: Post[] = [];
+      for (const data of postsFound) {
+        posts.push(new Post(
+          data.id,
+          data.text,
+          data.authorId,
+          data.createdAt,
+          data.updatedAt
+        ));
+      }
+      return posts
+
     } finally {
       this.prismaClientAdapter.close
     }
   }
 
-  async get(where: Prisma.PostWhereUniqueInput): Promise<Post | null> {
+  async get(where: { id: string }): Promise<Post | null> {
     try {
       const postFound = await this.prismaClientAdapter.prismaClient.post.findUnique({
-        where
+        where,
+        include: {
+          author: true
+        }
       })
-      return postFound
+      return postFound && new Post(
+        postFound.id,
+        postFound.text,
+        undefined,
+        postFound.createdAt,
+        postFound.updatedAt,
+        postFound.author
+      )
     } finally {
       this.prismaClientAdapter.close
     }
   }
 
-  async check(where: Prisma.PostWhereUniqueInput): Promise<boolean> {
+  async check(where: { id: string }): Promise<boolean> {
     try {
       const postFound = await this.prismaClientAdapter.prismaClient.post.findUnique({
         where
@@ -50,7 +83,7 @@ export default class PostRepositoryDatabase implements PostRepository {
     }
   }
 
-  async update(params: { where: Prisma.PostWhereUniqueInput, data: Prisma.PostUpdateInput }): Promise<void> {
+  async update(params: { where: { id: string }, data: { text: string } }): Promise<void> {
     try {
       const { where, data } = params
       await this.prismaClientAdapter.prismaClient.post.update({
@@ -62,7 +95,7 @@ export default class PostRepositoryDatabase implements PostRepository {
     }
   }
 
-  async delete(where: Prisma.PostWhereUniqueInput): Promise<void> {
+  async delete(where: { id: string }): Promise<void> {
     try {
       await this.prismaClientAdapter.prismaClient.post.delete({
         where

@@ -1,11 +1,12 @@
+import Campaign from "@/domain/entities/campaign";
 import RepositoryFactory from "@/domain/factory/repository-factory";
 import CampaignRepository from "@/domain/repository/campaign-repository";
 
 type Output = {
-  id?: string,
+  id: string,
   name: string,
   text: string,
-  interests: Array<string>,
+  interests: string[],
   startTime: Date,
   endTime: Date,
   status: boolean,
@@ -16,12 +17,29 @@ type Output = {
 export default class GetCampaigns {
   campaignRepository: CampaignRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.campaignRepository = repositoryFactory.createCampaignRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.campaignRepository = this.repositoryFactory.createCampaignRepository()
   }
 
   async execute(): Promise<Output[]> {
     const campaignsFound = await this.campaignRepository.list();
+
+    const campaigns: Campaign[] = []
+    for (const data of campaignsFound) {
+      campaigns.push(
+        new Campaign(
+          data.id,
+          data.name,
+          data.text,
+          data.interests,
+          data.startTime,
+          data.endTime,
+          data.status,
+          data.createdAt,
+          data.updatedAt
+        )
+      )
+    }
 
     return campaignsFound.map(campaign => (
       {

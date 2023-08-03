@@ -8,13 +8,16 @@ import { Status as status } from "../http/errors/http-helper";
 import InterestExistsError from "../http/errors/interest-exists";
 import NotFoundError from "../http/errors/not-found-error";
 import { Http, Method } from "../http/Http";
+import  CheckParams  from "./check-params";
+
 
 type ParamsProps = {
-  id: string
+  unique?: string
+  id?: string
+  name?:string
 }
 
-type BodyProps = {
-  id?: string
+type BodyProps = { 
   name: string
   active: boolean
 }
@@ -33,14 +36,14 @@ export default class InterestController {
       try {
         await saveInterest.execute(body);
         return status.created()
-      } catch (error) {
+      } catch (error) { 
         if (error instanceof InvalidObjectError) return status.badRequest(error)
         if (error instanceof InterestExistsError) return status.conflict(error)
         if (error instanceof Error) return status.internalServerError()
       }
     });
 
-    http.build(Method.GET, "/interests", async function (params: string[]) {
+    http.build(Method.GET, "/interests", async function (params?: string[]) {
       try {
         const interestsFound = await getInterests.execute(params);
         return status.success(interestsFound)
@@ -48,21 +51,28 @@ export default class InterestController {
         if (error instanceof Error) return status.internalServerError()
       }
     });
-
-    http.build(Method.GET, "/interests/:id", async function (params: ParamsProps) {
+ 
+    http.build(Method.GET, "/interests/:unique", async function (params: ParamsProps) {
+      let paramsChecked = {}
+      
       try {
-        const interestFound = await getInterest.execute(params)
+        if (params.unique) {
+          paramsChecked =  CheckParams.validade(params.unique) 
+        }
+        const interestFound = await getInterest.execute(paramsChecked)
         return status.success(interestFound)
       } catch (error) {
+        console.log(error)
         if (error instanceof NotFoundError) return status.notFound(error)
         if (error instanceof Error) return status.internalServerError()
       }
     });
 
     http.build(Method.PUT, "/interests/:id", async function (params: ParamsProps, body: BodyProps) {
-      try {
-        const { id } = params
-        const { name, active } = body
+      const { id } = params
+      const { name, active } = body
+      
+      try {      
         await updateInterest.execute({ where: { id }, data: { name, active } })
         return status.noContent()
       } catch (error) {
@@ -73,9 +83,15 @@ export default class InterestController {
       }
     });
 
-    http.build(Method.DELETE, "/interests/:id", async function (params: ParamsProps) {
+    http.build(Method.DELETE, "/interests/:unique", async function (params: ParamsProps) {
+      let paramsChecked = {}
+      
       try {
-        await deleteInterest.execute(params)
+        if (params.unique) {
+          paramsChecked =  CheckParams.validade(params.unique) 
+        }
+
+        await deleteInterest.execute(paramsChecked)
         return status.noContent()
       } catch (error) {
         if (error instanceof NotFoundError) return status.notFound(error)

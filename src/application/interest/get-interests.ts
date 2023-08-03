@@ -3,32 +3,39 @@ import RepositoryFactory from "@/domain/factory/repository-factory";
 import InterestRepository from "@/domain/repository/interest-repository";
 
 type Output = {
-  id?: string,
+  id: string,
   name: string,
   active: boolean,
-  createdAt?: Date,
-  updatedAt?: Date
+  createdAt: Date,
+  updatedAt: Date
 }
 
 export default class GetInterests {
   interestRepository: InterestRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.interestRepository = repositoryFactory.createInterestRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.interestRepository = this.repositoryFactory.createInterestRepository()
   }
 
-  async execute(where?: Array<string>): Promise<Output[]> {
+  async execute(where?: string[]): Promise<Output[]> {
     const interestsFound = await this.interestRepository.list(where);
-    return interestsFound.map(interest => (
-      {
-        id: interest.id,
-        name: interest.name,
-        active: interest.active,
-        createdAt: interest.createdAt,
-        updatedAt: interest.updatedAt
-      }
-    ))
+    const interests: Interest[] = []
+    for (const data of interestsFound) {
+      interests.push(new Interest(
+        data.id,
+        data.name,
+        data.active,
+        data.createdAt,
+        data.updatedAt
+      ))
+    }
+
+    return interests.map(interest => ({
+      id: interest.id,
+      name: interest.name,
+      active: interest.active,
+      createdAt: interest.createdAt,
+      updatedAt: interest.updatedAt
+    }))
   }
 }
-
-

@@ -1,11 +1,12 @@
+import Campaign from "@/domain/entities/campaign"
 import CampaignRepository from "@/domain/repository/campaign-repository"
 import PrismaClientAdapter from "@/infra/database/prisma-client-adapter"
-import { Prisma, Campaign } from "@prisma/client"
+import { Prisma } from "@prisma/client"
 
 export default class CampaignRepositoryDatabase implements CampaignRepository {
-  constructor(readonly prismaClientAdapter: PrismaClientAdapter) { }
+  constructor(private readonly prismaClientAdapter: PrismaClientAdapter) { }
 
-  async save(data: Prisma.CampaignCreateInput): Promise<void> {
+  async save(data: Campaign): Promise<void> {
     try {
       await this.prismaClientAdapter.prismaClient.campaign.create({
         data
@@ -22,24 +23,49 @@ export default class CampaignRepositoryDatabase implements CampaignRepository {
           createdAt: 'desc'
         }
       })
-      return campaignsFound
+      const campaigns: Campaign[] = []
+      for (const data of campaignsFound) {
+        campaigns.push(
+          new Campaign(
+            data.id,
+            data.name,
+            data.text,
+            data.interests,
+            data.startTime,
+            data.endTime,
+            data.status,
+            data.createdAt,
+            data.updatedAt
+          ))
+      }
+      return campaigns
     } finally {
       this.prismaClientAdapter.close
     }
   }
 
-  async get(where: Prisma.CampaignWhereUniqueInput): Promise<Campaign | null> {
+  async get(where: { id: string }): Promise<Campaign | null> {
     try {
       const campaignFound = await this.prismaClientAdapter.prismaClient.campaign.findUnique({
         where
       })
-      return campaignFound
+      return campaignFound && new Campaign(
+        campaignFound.id,
+        campaignFound.name,
+        campaignFound.text,
+        campaignFound.interests,
+        campaignFound.startTime,
+        campaignFound.endTime,
+        campaignFound.status,
+        campaignFound.createdAt,
+        campaignFound.updatedAt)
+
     } finally {
       this.prismaClientAdapter.close
     }
   }
 
-  async check(where: Prisma.CampaignWhereUniqueInput): Promise<boolean> {
+  async check(where: { id: string }): Promise<boolean> {
     try {
       const campaignFound = await this.prismaClientAdapter.prismaClient.campaign.findUnique({
         where
@@ -50,7 +76,7 @@ export default class CampaignRepositoryDatabase implements CampaignRepository {
     }
   }
 
-  async update(params: { where: Prisma.CampaignWhereUniqueInput, data: Prisma.CampaignUpdateInput }): Promise<void> {
+  async update(params: { where: { id: string }, data: Prisma.CampaignUpdateInput }): Promise<void> {
     try {
       const { where, data } = params
       await this.prismaClientAdapter.prismaClient.campaign.update({
@@ -62,7 +88,7 @@ export default class CampaignRepositoryDatabase implements CampaignRepository {
     }
   }
 
-  async delete(where: Prisma.CampaignWhereUniqueInput): Promise<void> {
+  async delete(where: { id: string }): Promise<void> {
     try {
       await this.prismaClientAdapter.prismaClient.campaign.delete({
         where

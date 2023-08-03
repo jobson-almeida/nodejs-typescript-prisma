@@ -1,4 +1,3 @@
-import Post from "../entities/post"
 import User from "../entities/user"
 
 type WhereUniqueInput = {
@@ -7,24 +6,13 @@ type WhereUniqueInput = {
 }
 
 type UpdateInput = {
-  id?: string
   name?: string
   email?: string
-  interests?: Array<string>
-}
-
-type Users = {
-  id?: string,
-  name: string,
-  email: string,
-  interests: Array<string>,
-  // posts?: Array<Post>,
-  createdAt?: Date,
-  updatedAt?: Date
+  interests?: string[] 
 }
 
 export default interface UserRepository {
-  save(data: Users): Promise<void>
+  save(data: User): Promise<void>
   list(): Promise<User[]>
   get(where: WhereUniqueInput): Promise<User | null>
   check(where: WhereUniqueInput): Promise<boolean>

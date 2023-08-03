@@ -1,18 +1,16 @@
-import Campaign from "@/domain/entities/campaign"
 import RepositoryFactory from "@/domain/factory/repository-factory"
 import CampaignRepository from "@/domain/repository/campaign-repository"
 import InterestRepository from "@/domain/repository/interest-repository"
 import NotFoundError from "@/infra/http/errors/not-found-error"
 
 type WhereUniqueInput = {
-  id?: string
+  id: string
 }
 
 type UpdateInput = {
-  id: string | undefined,
   name: string,
   text: string,
-  interests: Array<string>,
+  interests: string[],
   startTime: Date,
   endTime: Date,
   status: boolean,
@@ -24,9 +22,9 @@ export default class UpdateCampaign {
   campaignRepository: CampaignRepository
   interestRepository: InterestRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.campaignRepository = repositoryFactory.createCampaignRepository()
-    this.interestRepository = repositoryFactory.createInterestRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.campaignRepository = this.repositoryFactory.createCampaignRepository()
+    this.interestRepository = this.repositoryFactory.createInterestRepository()
   }
 
   async execute(params: { where: WhereUniqueInput, data: UpdateInput }): Promise<void> {
@@ -42,9 +40,19 @@ export default class UpdateCampaign {
         if (!interestFound) throw new NotFoundError("Interest not found")
       }
     }
+    campaignFound.build(name, text, interests, startTime, endTime, status)
+    const campaign = {
+      name: campaignFound.name,
+      text: campaignFound.text,
+      interests: campaignFound.interests,
+      startTime: campaignFound.startTime,
+      endTime: campaignFound.endTime,
+      status: campaignFound.status
+    }
+
     await this.campaignRepository.update({
       where: params.where,
-      data: new Campaign(id, name, text, interests, startTime, endTime, status)
+      data: campaign
     })
   }
 }

@@ -8,8 +8,8 @@ type WhereUniqueInput = {
 export default class CheckPostId {
   postRepository: PostRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.postRepository = repositoryFactory.createPostRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.postRepository = this.repositoryFactory.createPostRepository()
   }
 
   async execute(where: WhereUniqueInput): Promise<boolean> {

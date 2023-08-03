@@ -1,12 +1,13 @@
+import Campaign from "@/domain/entities/campaign";
 import RepositoryFactory from "@/domain/factory/repository-factory";
 import CampaignRepository from "@/domain/repository/campaign-repository"
 import NotFoundError from "@/infra/http/errors/not-found-error";
 
 type Output = {
-  id?: string,
+  id: string,
   name: string,
   text: string,
-  interests: Array<string>,
+  interests: string[],
   startTime: Date,
   endTime: Date,
   status: boolean,
@@ -21,23 +22,35 @@ type WhereUniqueInput = {
 export default class GetCampaign {
   campaignRepository: CampaignRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.campaignRepository = repositoryFactory.createCampaignRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.campaignRepository = this.repositoryFactory.createCampaignRepository()
   }
 
   async execute(where: WhereUniqueInput): Promise<Output | null> {
     const campaignFound = await this.campaignRepository.get(where)
     if (!campaignFound) throw new NotFoundError('Campaign not found')
+    const campaign: Campaign = new Campaign(
+      campaignFound.id,
+      campaignFound.name,
+      campaignFound.text,
+      campaignFound.interests,
+      campaignFound.startTime,
+      campaignFound.endTime,
+      campaignFound.status,
+      campaignFound.createdAt,
+      campaignFound.updatedAt
+    )
+
     return {
-      id: campaignFound.id,
-      name: campaignFound.name,
-      text: campaignFound.text,
-      interests: campaignFound.interests,
-      startTime: campaignFound.startTime,
-      endTime: campaignFound.endTime,
-      status: campaignFound.status,
-      createdAt: campaignFound.createdAt,
-      updatedAt: campaignFound.updatedAt
+      id: campaign.id,
+      name: campaign.name,
+      text: campaign.text,
+      interests: campaign.interests,
+      startTime: campaign.startTime,
+      endTime: campaign.endTime,
+      status: campaign.status,
+      createdAt: campaign.createdAt,
+      updatedAt: campaign.updatedAt
     }
   }
 }

@@ -16,10 +16,9 @@ type ParamsType = {
 }
 
 type BodyType = {
-  id?: string
   name: string
   text: string
-  interests: Array<string>
+  interests: string[],
   startTime: Date,
   endTime: Date,
   status: boolean
@@ -75,7 +74,7 @@ export default class CampaignController {
         const { name, text, interests, startTime, endTime, status } = body
         await updateCampaign.execute({
           where: { id },
-          data: { id, name, text, interests, startTime, endTime, status }
+          data: { name, text, interests, startTime, endTime, status }
         })
         return Status.noContent()
       } catch (error) {

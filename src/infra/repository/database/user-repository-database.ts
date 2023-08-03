@@ -1,14 +1,20 @@
+import User from "@/domain/entities/user"
 import UserRepository from "@/domain/repository/user-repository"
 import PrismaClientAdapter from "@/infra/database/prisma-client-adapter"
-import { Prisma, User } from "@prisma/client"
 
 export default class UserRepositoryDatabase implements UserRepository {
-  constructor(readonly prismaClientAdapter: PrismaClientAdapter) { }
+  constructor(private readonly prismaClientAdapter: PrismaClientAdapter
+  ) { }
 
-  async save(data: Prisma.UserUncheckedCreateInput): Promise<void> {
+  async save(data: { id: string, name: string, email: string, interests: string[] }): Promise<void> {
     try {
       await this.prismaClientAdapter.prismaClient.user.create({
-        data
+        data: {
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          interests: data.interests 
+        }
       })
     } finally {
       this.prismaClientAdapter.close
@@ -20,40 +26,65 @@ export default class UserRepositoryDatabase implements UserRepository {
       const usersFound = await this.prismaClientAdapter.prismaClient.user.findMany({
         orderBy: {
           createdAt: 'desc'
-        }
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          interests: true,
+          createdAt: true,
+          updatedAt: true
+        }, 
       })
-      return usersFound
+      
+      const users: User[] = [];
+      for (const data of usersFound) {
+        users.push(new User(
+          data.id,
+          data.name,
+          data.email,
+          data.interests,
+          undefined,
+          data.createdAt,
+          data.updatedAt
+        ));
+      }
+      return users;
     } finally {
       this.prismaClientAdapter.close
     }
   }
 
-  async get(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
+  async get(where: { id: string, email: string }): Promise<User | null> {
     try {
       const userFound = await this.prismaClientAdapter.prismaClient.user.findUnique({
         where,
         include: {
           posts: {
-            take: 2,
-            orderBy: {
-              createdAt: 'desc'
-            },
             select: {
               id: true,
-              text: true,
+              text: true, 
               createdAt: true,
               updatedAt: true
             }
           }
         }
       })
-      return userFound
+      return userFound && new User(
+        userFound.id,
+        userFound.name,
+        userFound.email,
+        userFound.interests,
+        userFound.posts,
+        userFound.createdAt,
+        userFound.updatedAt
+      )
     } finally {
       this.prismaClientAdapter.close
     }
   }
 
-  async check(where: Prisma.UserWhereUniqueInput): Promise<boolean> {
+  async check(where: { id: string, email: string }): Promise<boolean> {
     try {
       const userFound = await this.prismaClientAdapter.prismaClient.user.findUnique({
         where
@@ -64,7 +95,7 @@ export default class UserRepositoryDatabase implements UserRepository {
     }
   }
 
-  async update(params: { where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput }): Promise<void> {
+  async update(params: { where: { id: string, email: string }, data: { name: string, email: string, interests: string[] } }): Promise<void> {
     const { where, data } = params
     try {
       await this.prismaClientAdapter.prismaClient.user.update({
@@ -76,7 +107,7 @@ export default class UserRepositoryDatabase implements UserRepository {
     }
   }
 
-  async delete(where: Prisma.UserWhereUniqueInput): Promise<void> {
+  async delete(where: { id: string, email: string }): Promise<void> {
     try {
       await this.prismaClientAdapter.prismaClient.user.delete({
         where

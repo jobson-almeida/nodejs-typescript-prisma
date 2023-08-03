@@ -4,7 +4,6 @@ import InterestRepository from "@/domain/repository/interest-repository"
 import InterestExistsError from "@/infra/http/errors/interest-exists"
 
 type Input = {
-  id?: string
   name: string
   active: boolean
 }
@@ -12,14 +11,15 @@ type Input = {
 export default class SaveInterest {
   interestRepository: InterestRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.interestRepository = repositoryFactory.createInterestRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.interestRepository = this.repositoryFactory.createInterestRepository()
   }
 
   async execute(data: Input): Promise<void> {
-    const { id, name, active } = data
+    const { name, active } = data
     const existsInterest = await this.interestRepository.check({ name })
     if (existsInterest) throw new InterestExistsError()
-    await this.interestRepository.save(new Interest(id, name, active))
+    const interest = Interest.create(name, active)
+    await this.interestRepository.save(interest)
   }
 }

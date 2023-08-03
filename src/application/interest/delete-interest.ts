@@ -3,14 +3,15 @@ import InterestRepository from "@/domain/repository/interest-repository";
 import NotFoundError from "@/infra/http/errors/not-found-error";
 
 type WhereUniqueInput = {
-  id?: string
+  id?: string,
+  name?: string
 }
 
 export default class DeleteInterest {
   interestRepository: InterestRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.interestRepository = repositoryFactory.createInterestRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.interestRepository = this.repositoryFactory.createInterestRepository()
   }
 
   async execute(where: WhereUniqueInput): Promise<void> {

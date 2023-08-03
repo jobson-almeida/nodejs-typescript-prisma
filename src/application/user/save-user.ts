@@ -5,26 +5,26 @@ import User from "@/domain/entities/user";
 import EmailExistsError from "@/infra/http/errors/email-exists";
 import InactiveInterestError from "@/infra/http/errors/inactive-interest";
 import NotFoundError from "@/infra/http/errors/not-found-error";
+import Post from "@/domain/entities/post";
 
-type Input = {
-  id?: string
+type Input = { 
   name: string
   email: string
-  interests: Array<string>
-  //  posts?: Array<Post>
+  interests: string[] 
+  posts: Post[]
 }
 
 export default class SaveUser {
   userRepository: UserRepository
   interestRepository: InterestRepository
 
-  constructor(repositoryFactory: RepositoryFactory) {
-    this.userRepository = repositoryFactory.createUserRepository();
-    this.interestRepository = repositoryFactory.createInterestRepository();
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.userRepository = this.repositoryFactory.createUserRepository();
+    this.interestRepository = this.repositoryFactory.createInterestRepository();
   }
 
   async execute(data: Input): Promise<void> {
-    const { id, name, email, interests } = data
+    const { name, email, interests } = data
     const existsEmail = await this.userRepository.check({ email })
     if (existsEmail) throw new EmailExistsError()
     if (data.interests && data.interests.length > 0) {
@@ -36,6 +36,7 @@ export default class SaveUser {
         }
       }
     }
-    await this.userRepository.save(new User(id, name, email, interests))
+    const user = User.create(name, email, interests)
+    await this.userRepository.save(user)
   }
 } 

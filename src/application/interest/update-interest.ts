@@ -12,30 +12,31 @@ type WhereUniqueInput = {
 export type UpdateInput = {
   id?: string
   name: string
-  active: boolean
-  createdAt?: Date
-  updatedAt?: Date
+  active: boolean 
 }
 
 export default class UpdateInterest {
   interestRepository: InterestRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.interestRepository = repositoryFactory.createInterestRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.interestRepository = this.repositoryFactory.createInterestRepository()
   }
 
   async execute(params: { where: WhereUniqueInput, data: UpdateInput }): Promise<void> {
     const { id } = params.where
     const { name, active } = params.data
 
-    const interestFound = await this.interestRepository.check({ id })
+    const interestFound = await this.interestRepository.get({ id })
     if (!interestFound) throw new NotFoundError("Interest not found")
     const interestNameFound = await this.interestRepository.get({ name })
-    if (interestNameFound?.id !== id && interestNameFound?.name === name) throw new InterestExistsError()
+    if (interestNameFound && interestNameFound.id !== id) throw new InterestExistsError()
 
+    interestFound.build(name, active)
+    const interest = { name: interestFound.name, active: interestFound?.active}
+    
     await this.interestRepository.update({
       where: params.where,
-      data: new Interest(id, name, active)
+      data: interest 
     })
   }
 }

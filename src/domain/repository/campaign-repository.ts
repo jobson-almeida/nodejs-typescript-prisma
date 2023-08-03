@@ -1,16 +1,14 @@
 import Campaign from "../entities/campaign"
 
+ 
 type WhereUniqueInput = {
-  id?: string
+  id: string
 }
 
-type UpdateInput = {
-  id?: string
-  name?: string,
-  text?: string,
-  interests?: Array<string>,
-  startTime?: Date,
-  endTime?: Date,
+type UpdateInput = { 
+  name?:  string,
+  text?:  string,
+  interests?:   string[],
   status?: boolean
 }
 

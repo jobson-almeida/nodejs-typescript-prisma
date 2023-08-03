@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  application:
+    build: .
+    ports:
+      - 4000:3000
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/database01?schema=public
+    volumes:
+      - .:/home/node/application
+    depends_on:
+      database:
+        condition: service_healthy
+    
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: database01
+    ports:
+      - "54320:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres:

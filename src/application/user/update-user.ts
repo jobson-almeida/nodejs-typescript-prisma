@@ -1,4 +1,3 @@
-import User from "@/domain/entities/user";
 import RepositoryFactory from "@/domain/factory/repository-factory";
 import InterestRepository from "@/domain/repository/interest-repository";
 import UserRepository from "@/domain/repository/user-repository"
@@ -15,33 +14,39 @@ export type UpdateInput = {
   id?: string
   name: string
   email: string
-  interests: Array<string>
-  //  posts?: Array<Post>
-  createdAt?: string
-  updatedAt?: string
+  interests: string[]
 }
 
 export default class UpdateUser {
   userRepository: UserRepository
   interestRepository: InterestRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.userRepository = repositoryFactory.createUserRepository()
-    this.interestRepository = repositoryFactory.createInterestRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.userRepository = this.repositoryFactory.createUserRepository()
+    this.interestRepository = this.repositoryFactory.createInterestRepository()
   }
 
   async execute(params: { where: WhereUniqueInput, data: UpdateInput }): Promise<void> {
     const { id } = params.where
     const { name, email, interests } = params.data
-    const userFound = await this.userRepository.get({ email })
-    if (userFound?.email === email && userFound?.id !== id) throw new EmailExistsError()
-    if (userFound?.interests && userFound?.interests.length > 0) {
-      for (let id of userFound.interests) {
+    const userFoundFromId = await this.userRepository.get({id})
+    const userFoundFromEmail = await this.userRepository.get({email})
+    if (userFoundFromEmail?.email === email && userFoundFromEmail?.id !== id) throw new EmailExistsError()
+    if (userFoundFromEmail?.interests && userFoundFromEmail?.interests.length > 0) {
+      for (let id of userFoundFromEmail.interests) {
         const interestFound = await this.interestRepository.get({ id })
         if (!interestFound) throw new NotFoundError("Interest not found")
         if (interestFound.active === false) throw new InactiveInterestError()
       }
     }
-    await this.userRepository.update({ where: params.where, data: new User(id, name, email, interests) })
+    
+    userFoundFromId &&
+      userFoundFromId.build(name, email, interests) 
+      const user = { 
+        name: userFoundFromId?.name,
+        email: userFoundFromId?.email,
+        interests: userFoundFromId?.interests
+      }
+      await this.userRepository.update({ where: params.where, data: user })
   }
 }

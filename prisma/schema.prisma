@@ -11,48 +11,48 @@ datasource db {
 }
 
 model Interest {
-  id        String   @id @default(uuid())
+  id        String   @id
   name      String   @unique
   active    Boolean
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("interests")
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String   @id
   name      String
   email     String   @unique
   interests String[]
   posts     Post[]
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("users")
 }
 
 model Post {
-  id        String   @id @default(uuid())
+  id        String   @id
   text      String
-  authorId  String
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt  
+  author    User?     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@map("posts")
 }
 
 model Campaign {
-  id        String   @id @default(uuid())
+  id        String   @id
   name      String
   text      String
   interests String[]
   startTime DateTime
   endTime   DateTime
   status    Boolean
-  createdAt DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("campaigns")
 }

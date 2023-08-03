@@ -1,25 +1,32 @@
+import User from "@/domain/entities/user";
 import RepositoryFactory from "@/domain/factory/repository-factory";
 import UserRepository from "@/domain/repository/user-repository";
 
 type Output = {
-  id?: string,
+  id: string,
   name: string,
   email: string,
-  interests: Array<string>,
-  createdAt?: Date,
-  updatedAt?: Date
+  interests: string[],
+  createdAt: Date,
+  updatedAt: Date
 }
 
 export default class GetUsers {
   userRepository: UserRepository
 
-  constructor(repositoryFactory: RepositoryFactory) {
-    this.userRepository = repositoryFactory.createUserRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.userRepository = this.repositoryFactory.createUserRepository()
   }
 
   async execute(): Promise<Output[]> {
     const usersFound = await this.userRepository.list();
-    return usersFound.map(user => (
+
+    const users: User[] = []
+    for (const data of usersFound) {
+      users.push(new User(data.id, data.name, data.email, data.interests, undefined, data.createdAt, data.updatedAt))
+    }
+
+    return users.map(user => (
       {
         id: user.id,
         name: user.name,

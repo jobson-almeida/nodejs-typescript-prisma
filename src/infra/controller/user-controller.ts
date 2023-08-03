@@ -10,16 +10,20 @@ import EmailExistsError from "../http/errors/email-exists";
 import InactiveInterestError from "../http/errors/inactive-interest";
 import NotFoundError from "../http/errors/not-found-error";
 import InvalidUUIDError from "@/domain/entities/errors/invalid-uuid";
+import Post from "@/domain/entities/post";
+import CheckParams from "./check-params";
 
 type ParamsType = {
-  id: string
+  unique?: string
+  id?: string
+  email?: string
 }
 
 type BodyType = {
   name: string
   email: string
-  interests: Array<string>
-  // posts?: Array<Post>
+  interests: string[]
+  posts: Post[]
 }
 
 export default class UserController {
@@ -55,10 +59,15 @@ export default class UserController {
       }
     });
 
-    http.build(Method.GET, "/users/:id", async function (params: ParamsType) {
+    http.build(Method.GET, "/users/:unique", async function (params: ParamsType) {
+      let paramsChecked = {}
+      
       try {
-        const { id } = params
-        const userFound = await getUser.execute({ id })
+        if (params.unique) {
+          paramsChecked =  CheckParams.validade(params.unique) 
+        }
+        
+        const userFound = await getUser.execute(paramsChecked)
         return status.success(userFound)
       } catch (error) {
         if (error instanceof NotFoundError) return status.notFound(error)
@@ -70,6 +79,7 @@ export default class UserController {
       try {
         const { id } = params
         const { name, email, interests } = body
+
         await updateUser.execute({
           where: { id },
           data: { name, email, interests }

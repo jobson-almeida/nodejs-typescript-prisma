@@ -1,10 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 
 export default class PrismaClientAdapter {
-  prismaClient: PrismaClient
+  prismaClient: PrismaClient 
 
   constructor() {
-    this.prismaClient = new PrismaClient()
+    this.prismaClient = new PrismaClient() 
+
   }
 
   async close(): Promise<void> {

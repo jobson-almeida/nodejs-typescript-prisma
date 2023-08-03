@@ -6,14 +6,13 @@ import UpdatePost from "@/application/post/update-post";
 import InvalidObjectError from "@/domain/entities/errors/invalid-object";
 import { Status, Status as status } from "../http/errors/http-helper";
 import NotFoundError from "../http/errors/not-found-error";
-import { Http, Method } from "../http/Http";
+import { Http, Method } from "../http/Http"; 
 
 type ParamsProps = {
-  id: string
+  id: string,  
 }
 
-type BodyProps = {
-  id?: string
+type BodyProps = { 
   text: string
   authorId: string
 }
@@ -34,6 +33,7 @@ export default class PostController {
         return status.created()
       } catch (error) {
         if (error instanceof Error) {
+          console.log(error)
           if (error instanceof InvalidObjectError) return status.badRequest(error)
           if (error instanceof NotFoundError) return status.notFound(error)
           if (error instanceof Error) return status.internalServerError()
@@ -51,7 +51,7 @@ export default class PostController {
     });
 
     http.build(Method.GET, "/posts/:id", async function (params: ParamsProps) {
-      try {
+      try {    
         const { id } = params
         const post = await getPost.execute({ id })
         return status.success(post)

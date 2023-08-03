@@ -8,8 +8,8 @@ type WhereUniqueInput = {
 export default class CheckCampaign {
   campaignRepository: CampaignRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.campaignRepository = repositoryFactory.createCampaignRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.campaignRepository = this.repositoryFactory.createCampaignRepository()
   }
 
   async execute(where: WhereUniqueInput): Promise<boolean> {

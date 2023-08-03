@@ -9,8 +9,8 @@ type WhereUniqueInput = {
 export default class CheckInterest {
   interestRepository: InterestRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.interestRepository = repositoryFactory.createInterestRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.interestRepository = this.repositoryFactory.createInterestRepository()
   }
 
   async execute(where: WhereUniqueInput): Promise<boolean> {

@@ -9,8 +9,8 @@ type WhereUniqueInput = {
 export default class CheckUser {
   userRepository: UserRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.userRepository = repositoryFactory.createUserRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.userRepository = this.repositoryFactory.createUserRepository()
   }
 
   async execute(where: WhereUniqueInput): Promise<boolean> {

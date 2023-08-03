@@ -1,11 +1,10 @@
-import Post from "@/domain/entities/post";
 import RepositoryFactory from "@/domain/factory/repository-factory";
 import PostRepository from "@/domain/repository/post-repository"
 import UserRepository from "@/domain/repository/user-repository";
 import NotFoundError from "@/infra/http/errors/not-found-error";
 
 type WhereUniqueInput = {
-  id?: string
+  id: string
 }
 
 export type UpdateInput = {
@@ -18,20 +17,25 @@ export default class UpdatePost {
   postRepository: PostRepository
   userRepository: UserRepository
 
-  constructor(readonly repositoryFactory: RepositoryFactory) {
-    this.postRepository = repositoryFactory.createPostRepository()
-    this.userRepository = repositoryFactory.createUserRepository()
+  constructor(private readonly repositoryFactory: RepositoryFactory) {
+    this.postRepository = this.repositoryFactory.createPostRepository()
+    this.userRepository = this.repositoryFactory.createUserRepository()
   }
 
   async execute(params: { where: WhereUniqueInput, data: UpdateInput }): Promise<void> {
-    const { id, text, authorId } = params.data
-    const postFound = await this.postRepository.check({ id: params.where.id })
+    const { id } = params.where
+    const { text, authorId } = params.data
+    const postFound = await this.postRepository.get({ id })
     if (!postFound) throw new NotFoundError("Post not found")
     const authorFound = await this.userRepository.check({ id: authorId })
     if (!authorFound) throw new NotFoundError("Author not found")
+    
+    postFound.build(text, authorId)
+    const post = {text: postFound.text, authorId: postFound.authorId}
+
     await this.postRepository.update({
       where: params.where,
-      data: new Post(id, text, authorId)
+      data: post
     })
   }
 }

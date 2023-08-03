@@ -1,13 +1,12 @@
 import Post from "../entities/post"
-
+ 
 type WhereUniqueInput = {
-  id?: string
+  id: string
 }
 
-type UpdateInput = {
-  id?: string
-  text?: string
-  authorId?: string
+type UpdateInput = { 
+  text?:  string
+  authorId?:  string
 }
 
 export default interface PostRepository {

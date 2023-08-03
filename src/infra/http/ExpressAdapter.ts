@@ -37,7 +37,7 @@ export default class ExpressAdapter implements Http {
   }
 
   build(method: Method, url: string, callback: Function): void {
-    this.app[method](url, async function (request?: Request, response?: Response) {
+    this.app[method](url, async function (request?: Request, response?: Response) {      
       const output = await callback(request?.params, request?.body)
       response?.status(output.statusCode).json(output.body)
     });
@@ -46,9 +46,9 @@ export default class ExpressAdapter implements Http {
   listen(port: number): void {
     try {
       this.app.listen(port);
-      console.log(`⭐️connected from http://localhost:${port}`)
+      console.log('⭐️connected from http://localhost:4000')
     } catch (e) {
       throw new Error('Not connected')
     }
   }
-}
+}   

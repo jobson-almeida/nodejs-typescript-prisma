@@ -1,14 +1,14 @@
 import Interest from "../entities/interest"
 
-type UpdateInput = {
-  id?: string
-  name?: string
-  active?: boolean
-}
-
+ 
 type WhereUniqueInput = {
   id?: string
   name?: string
+}
+
+type UpdateInput = {
+  name?: string
+  active?: boolean
 }
 
 export default interface InterestRepository {

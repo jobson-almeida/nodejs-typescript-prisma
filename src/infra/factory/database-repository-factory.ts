@@ -11,7 +11,7 @@ import UserRepositoryDatabase from "../repository/database/user-repository-datab
 
 export default class DatabaseRepositoryFactory implements RepositoryFactory {
 
-	constructor(readonly prismaClientAdapter: PrismaClientAdapter) { }
+	constructor(private readonly prismaClientAdapter: PrismaClientAdapter) { }
 
 	createUserRepository(): UserRepository {
 		return new UserRepositoryDatabase(this.prismaClientAdapter);
