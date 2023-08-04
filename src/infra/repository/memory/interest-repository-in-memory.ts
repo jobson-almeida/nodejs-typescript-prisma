@@ -47,13 +47,23 @@ export default class InterestRepositoryDatabaseInMemory implements InterestRepos
     return this.interests
   }
 
-/*
-  async check(where: WhereInput): Promise<boolean> {
-    const interestFound = this.interests.find((value) => value.id === where.id)
-    return interestFound ? true : false
+  async check(where: { id?: string, name?: string }): Promise<boolean> {
+    const { id, name } = where
+
+    let interestFound: Interest[] = []
+    if (this.interests === undefined) return false
+    if (id) {
+      interestFound = this.interests.filter((value) => value.id === id)
+    } else if (name) {
+      interestFound = this.interests.filter((value) => value.name === name)
+    }
+    if (interestFound.length > 0) {
+      return true
+    }
+    return false
   }
 
-  async get(where: WhereInput): Promise<Interest | null> {
+/*  async get(where: WhereInput): Promise<Interest | null> {
     const interest = this.interests.find((value) => value.id === where.id)
     return interest ?? null
   }
