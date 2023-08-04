@@ -27,4 +27,12 @@ describe("Interest unit", () => {
     expect(interest.updatedAt).toBeUndefined()
   })
  
+  test("Should not create interest unit with empty name", () => {
+    const input = {
+      name: "",
+      active: true
+    }
+    expect(() => Interest.create(input.name, input.active)).toThrow(new InvalidObjectError("Invalid name field content: set a name"))
+  })
+
 })
