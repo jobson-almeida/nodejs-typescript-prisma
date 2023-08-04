@@ -1,53 +1,28 @@
+import Interest from "@/domain/entities/interest";
 import InterestRepository from "@/domain/repository/interest-repository";
 import { randomUUID } from "crypto";
 
-type Interest = {
-  id: string
-  name: string
-  active: boolean
-  createdAt: Date
-  updatedAt: Date
-}
-
-type WhereInput = {
-  id?: string
-  name?: string
-}
-
-type UpdateInput = {
-  id?: string
-  name?: string
-  active?: boolean
-}
-
-type Input = {
-  id?: string
-  name: string
-  active: boolean
-}
+ 
+ 
 
 export default class InterestRepositoryDatabaseInMemory implements InterestRepository {
-  interest: Interest
   interests: Interest[]
 
-  constructor() { }
+  constructor() {}
 
-  async save(input: Input): Promise<void> {
-    this.interests = [
-      {
-        id: randomUUID(),
-        name: input.name,
-        active: input.active,
-        createdAt: new Date(Date.now()),
-        updatedAt: new Date(Date.now())
-      }
-    ]
+  async save(data: Interest): Promise<void> {
+    this.interests = []
+    const now = new Date(Date.now())
+
+    data.createdAt = now
+    data.updatedAt = now
+    data && this.interests.push(data) 
   }
 
-  async list(): Promise<Interest[]> {
+  async list(): Promise<Interest[]> {    
     return this.interests
   }
-
+/*
   async check(where: WhereInput): Promise<boolean> {
     const interestFound = this.interests.find((value) => value.id === where.id)
     return interestFound ? true : false
@@ -71,4 +46,5 @@ export default class InterestRepositoryDatabaseInMemory implements InterestRepos
     const indexFound = this.interests.findIndex((value) => value.id === where.id)
     this.interests.splice(indexFound, 1)
   }
+  */
 }
