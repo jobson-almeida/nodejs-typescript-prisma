@@ -19,9 +19,34 @@ export default class InterestRepositoryDatabaseInMemory implements InterestRepos
     data && this.interests.push(data) 
   }
 
-  async list(): Promise<Interest[]> {    
+  async list(ids?: string[]): Promise<Interest[]> {
+    let output: Interest[] = [];
+    let interestsFound = []
+
+    try {
+      if (ids && ids.length > 0) {
+        for (const id of ids) {
+          interestsFound.push(this.interests.find((value) => value.id === id))
+        }
+
+        for (const data of interestsFound) {
+          data &&
+            this.interests.push(new Interest(data.id, data.name, data.active, data.createdAt, data.updatedAt))
+        }
+
+        output = output.sort(function (a, b) {
+          const dateA = new Date(a.createdAt).getTime();
+          const dateB = new Date(b.createdAt).getTime();
+          return dateA < dateB ? 1 : -1;
+        });
+        return output
+      }  
+    } catch (error) {
+      //console.log(error)
+    }
     return this.interests
   }
+
 /*
   async check(where: WhereInput): Promise<boolean> {
     const interestFound = this.interests.find((value) => value.id === where.id)
