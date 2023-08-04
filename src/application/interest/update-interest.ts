@@ -26,7 +26,7 @@ export default class UpdateInterest {
     const { id } = params.where
     const { name, active } = params.data
 
-    const interestFound = await this.interestRepository.get({ id })
+    const interestFound = await this.interestRepository.get(params.where)
     if (!interestFound) throw new NotFoundError("Interest not found")
     const interestNameFound = await this.interestRepository.get({ name })
     if (interestNameFound && interestNameFound.id !== id) throw new InterestExistsError()

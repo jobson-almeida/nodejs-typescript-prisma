@@ -53,8 +53,7 @@ export default class InterestController {
     });
  
     http.build(Method.GET, "/interests/:unique", async function (params: ParamsProps) {
-      let paramsChecked = {}
-      
+      let paramsChecked = {}    
       try {
         if (params.unique) {
           paramsChecked =  CheckParams.validade(params.unique) 
@@ -68,14 +67,18 @@ export default class InterestController {
       }
     });
 
-    http.build(Method.PUT, "/interests/:id", async function (params: ParamsProps, body: BodyProps) {
-      const { id } = params
+    http.build(Method.PUT, "/interests/:unique", async function (params: ParamsProps, body: BodyProps) {
       const { name, active } = body
-      
-      try {      
-        await updateInterest.execute({ where: { id }, data: { name, active } })
+      let paramsChecked = {}    
+      try {
+        if (params.unique) {
+          paramsChecked =  CheckParams.validade(params.unique) 
+        }
+        await updateInterest.execute({ where: paramsChecked, data: { name, active } })
         return status.noContent()
       } catch (error) {
+        
+        console.log(error)
         if (error instanceof InvalidObjectError) return status.badRequest(error)
         if (error instanceof NotFoundError) return status.notFound(error)
         if (error instanceof InterestExistsError) return status.conflict(error)
@@ -83,15 +86,9 @@ export default class InterestController {
       }
     });
 
-    http.build(Method.DELETE, "/interests/:unique", async function (params: ParamsProps) {
-      let paramsChecked = {}
-      
-      try {
-        if (params.unique) {
-          paramsChecked =  CheckParams.validade(params.unique) 
-        }
-
-        await deleteInterest.execute(paramsChecked)
+    http.build(Method.DELETE, "/interests/:id", async function (params: ParamsProps) {
+      try { 
+        await deleteInterest.execute({id:params.id})
         return status.noContent()
       } catch (error) {
         if (error instanceof NotFoundError) return status.notFound(error)

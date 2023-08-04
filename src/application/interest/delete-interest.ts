@@ -3,8 +3,7 @@ import InterestRepository from "@/domain/repository/interest-repository";
 import NotFoundError from "@/infra/http/errors/not-found-error";
 
 type WhereUniqueInput = {
-  id?: string,
-  name?: string
+  id?: string 
 }
 
 export default class DeleteInterest {

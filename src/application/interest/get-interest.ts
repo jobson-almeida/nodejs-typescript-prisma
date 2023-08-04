@@ -28,8 +28,6 @@ export default class GetInterest {
     if (!interestFound) throw new NotFoundError('Interest not found')
     const interest:Interest = new Interest(interestFound.id, interestFound.name, interestFound.active, interestFound.createdAt, interestFound.updatedAt)
 
-    console.log(interest)
-    
     return {
       id: interest.id,
       name: interest.name,
