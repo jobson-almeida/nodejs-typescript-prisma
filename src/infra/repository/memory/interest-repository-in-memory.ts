@@ -63,23 +63,36 @@ export default class InterestRepositoryDatabaseInMemory implements InterestRepos
     return false
   }
 
-/*  async get(where: WhereInput): Promise<Interest | null> {
-    const interest = this.interests.find((value) => value.id === where.id)
-    return interest ?? null
+  async get(where: { id?: string, name?: string }): Promise<Interest | null> {
+    let interestFound
+    if (where.id) {
+      interestFound = this.interests.find((value) => value.id === where.id)
+    } else {
+      interestFound = this.interests.find((value) => value.name === where.name)
+    }
+    if (interestFound)
+      return new Interest(interestFound.id, interestFound.name, interestFound.active, interestFound.createdAt, interestFound.updatedAt)
+    return null
   }
 
-  async update(params: { where: WhereInput, data: UpdateInput }): Promise<void> {
-    const indexFound = this.interests.findIndex((value) => value.id === params.where.id)
-    if (indexFound >= 0) {
-      if (params.data.name) this.interests[indexFound].name = params.data.name
-      if (params.data.active) this.interests[indexFound].active = false //params.data.active
-      this.interests[indexFound].updatedAt = new Date(Date.now())
+  async update(params: { where: { id?: string, name?: string }, data: { name: string, active: boolean } }): Promise<void> {
+    const { id, name } = params.where
+    let interestIndex
+    if (id) {
+      interestIndex = this.interests.findIndex((value) => value.id === id)
+    } else {
+      interestIndex = this.interests.findIndex((value) => value.name === name)
+    }
+
+    if (interestIndex >= 0) {
+      this.interests[interestIndex].name = params.data.name
+      this.interests[interestIndex].active = params.data.active
     }
   }
-
-  async delete(where: WhereInput): Promise<void> {
+ 
+  async delete(where: { id: string }): Promise<void> {
     const indexFound = this.interests.findIndex((value) => value.id === where.id)
-    this.interests.splice(indexFound, 1)
+    this.interests.splice(indexFound, 1) 
   }
-  */
+
 }
