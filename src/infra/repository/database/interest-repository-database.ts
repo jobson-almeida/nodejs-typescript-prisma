@@ -54,7 +54,7 @@ export default class InterestRepositoryDatabase implements InterestRepository {
     }
   }
 
-  async get(where: { id?: string, name?: string }): Promise<Interest | null> {
+  async get(where: { id: string, name: string }): Promise<Interest | null> {
     try {
       const interestFound = await this.prismaClientAdapter.prismaClient.interest.findUnique({
         where
@@ -67,7 +67,7 @@ export default class InterestRepositoryDatabase implements InterestRepository {
     }
   }
 
-  async check(where: { id?: string, name?: string }): Promise<boolean> {
+  async check(where: { id: string, name: string }): Promise<boolean> {
     try {
       const interestFound = await this.prismaClientAdapter.prismaClient.interest.findUnique({
         where
@@ -78,7 +78,7 @@ export default class InterestRepositoryDatabase implements InterestRepository {
     }
   }
 
-  async update(params: { where: { id?: string, name?: string }, data: { name: string, active: boolean }}): Promise<void> {
+  async update(params: { where: { id: string, name: string }, data: { name: string, active: boolean }}): Promise<void> {
     const { where, data } = params
     try {
       await this.prismaClientAdapter.prismaClient.interest.update({
