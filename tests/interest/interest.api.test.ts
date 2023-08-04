@@ -41,6 +41,18 @@ describe("API test using axios", () => {
     expect(interest.name).toEqual(expect.stringContaining("name"))
     expect(interest.active).toBeTruthy()
     expect(response.status).toBe(200)
+  }); 
+
+  test('Should delete an interest from id', async () => {
+    const response = await axios({
+      url: `http://localhost:3000/interests/${id}`,
+      method: "delete",
+      responseType: "json",
+      validateStatus: function (status) {
+        return status >= 200 && status < 299;
+      },
+    })
+    expect(response.status).toBe(204)
   });
 
 });
