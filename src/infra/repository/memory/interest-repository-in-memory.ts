@@ -1,9 +1,5 @@
 import Interest from "@/domain/entities/interest";
 import InterestRepository from "@/domain/repository/interest-repository";
-import { randomUUID } from "crypto";
-
- 
- 
 
 export default class InterestRepositoryDatabaseInMemory implements InterestRepository {
   interests: Interest[]
