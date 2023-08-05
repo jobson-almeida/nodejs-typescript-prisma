@@ -75,5 +75,6 @@ describe('Integration test', () => {
     expect(interestFound).toBeNull()
   });
   
+  //     35|     expect(() => Interest.create(input.name, input.active)).toThrow(new InvalidObjectError("Invalid name field content: s…
 });
 

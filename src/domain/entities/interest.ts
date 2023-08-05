@@ -15,27 +15,22 @@ export default class Interest {
     createdAt?: Date,
     updatedAt?: Date
   ) {
-    this.validate(name, active)
-    
-    this.name = name
+    this.name = name.trim()
     this.active = active
     this.createdAt = createdAt!
     this.updatedAt = updatedAt!
   }
-
-  private validate(name: string, active: boolean) {
-    if (!name) throw new InvalidObjectError("Invalid name field content: set a name")
-    if (!Util.validateBoolean(active)) throw new InvalidObjectError("Invalid active field content: set true or false")
-  }
   
   static create(name: string, active: boolean) {
+    if(!Util.validateString(name.trim())) throw new InvalidObjectError("Invalid name field content: review name format")
     const interestId = crypto.randomUUID();
-    return new Interest(interestId, name, active);
+    return new Interest(interestId, name.trim(), active);
   }
 
   build(name: string, active: boolean) { 
-    this.validate(name, active)
-    this.name = name
+    if(!Util.validateString(name)) throw new InvalidObjectError("Invalid name field content: review name format")
+    if (!Util.validateBoolean(active)) throw new InvalidObjectError("Invalid active field content: set true or false")
+    this.name = name.trim()
     this.active = active
   }
 }

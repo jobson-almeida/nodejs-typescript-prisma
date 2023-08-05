@@ -5,8 +5,16 @@ export default class Util {
   }
 
   static validateBoolean(value: any): boolean {
-    if (value === true) return true
-    if (value === false) return true
+    if (typeof value === "boolean") 
+      return true
+    return false
+  }
+
+  static validateString(value: string): boolean {
+    const regexUUID = /\w[ ]{2,}\w/
+    if (value.length >= 2 && regexUUID.test(value) === false) {
+      return true
+    }
     return false
   }
 
