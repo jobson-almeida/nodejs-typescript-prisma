@@ -58,7 +58,7 @@ describe('Integration test', () => {
     expect(interestFound).not.toBeNull()
     expect(interestFound?.id).toEqual(id)
   });
- 
+
   test('Should not get interest from invalid id or not found', async () => {
     const interestFound = await interestRepository.get({ id: "invalid or non-existent ID" })
     expect(interestFound).toBeNull()
@@ -70,8 +70,8 @@ describe('Integration test', () => {
     expect(interestFound?.name).toEqual(name)
   });
 
-  test('Should not get interest from invalid name or not found', async () => {
-    const interestFound = await interestRepository.get({ name: "invalid or non-existent name" })
+  test('Should not get interest from name valid non-existent', async () => {
+    const interestFound = await interestRepository.get({ name: "non-existent name" })
     expect(interestFound).toBeNull()
   });
   
