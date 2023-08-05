@@ -43,7 +43,12 @@ describe('Integration test', () => {
   });
 
   test('Must check non-existent record id', async () => {
-    const existsInterest = await interestRepository.check({ name: "123456" })
+    const existsInterest = await interestRepository.check({ id: "123456" })
+    expect(existsInterest).toBeFalsy()
+  })
+
+  test('Must check non-existent record name', async () => {
+    const existsInterest = await interestRepository.check({ name: "new interest" })
     expect(existsInterest).toBeFalsy()
   })
 
