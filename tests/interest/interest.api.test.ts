@@ -57,6 +57,18 @@ describe("API test using axios", () => {
     expect(response.status).toBe(200)
   });
 
+  test('Should not get an interest from id', async () => {
+    const response = await axios({
+      url: `http://localhost:3000/interests/1`,
+      method: "get",
+      responseType: "json",
+      validateStatus: function (status) {
+        return status >= 400 && status <= 500;
+      },
+    })
+    expect(response.status).toBe(404)
+  }); 
+
   test('Should get an interest from name', async () => {
     const response = await axios({
       url: `http://localhost:3000/interests/${unique}`,
