@@ -58,5 +58,11 @@ describe('Integration test', () => {
     expect(interestFound?.id).toEqual(id)
   });
 
+  test('Should get an interest from name', async () => {
+    const interestFound = await interestRepository.get({ name })
+    expect(interestFound).not.toBeNull()
+    expect(interestFound?.name).toEqual(name)
+  });
+
 });
 
