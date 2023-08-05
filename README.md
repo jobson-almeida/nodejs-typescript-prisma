@@ -53,6 +53,16 @@ Estudo Nodejs, Typescript e Prisma com práticas de Clean Architecture
 
 &nbsp;
 
+## Execução dos testes
+
+```javascript
+# docker compose exec application bash
+
+# npm run test
+```
+
+&nbsp;
+
 ## Documentação
 
 [http://localhost:4000/api-docs/](http://localhost:4000/api-docs/)
