@@ -1,3 +1,4 @@
+import InvalidObjectError from "@/domain/entities/errors/invalid-object";
 import Interest from "@/domain/entities/interest";
 import InterestRepositoryDatabaseInMemory from "@/infra/repository/memory/interest-repository-in-memory";
 import { randomUUID } from "crypto";
@@ -56,6 +57,11 @@ describe('Integration test', () => {
     const interestFound = await interestRepository.get({ id })
     expect(interestFound).not.toBeNull()
     expect(interestFound?.id).toEqual(id)
+  });
+ 
+  test('Should not get interest from invalid id or not found', async () => {
+    const interestFound = await interestRepository.get({ id: "invalid or non-existent ID" })
+    expect(interestFound).toBeNull()
   });
 
   test('Should get an interest from name', async () => {
