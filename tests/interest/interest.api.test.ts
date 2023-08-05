@@ -7,7 +7,7 @@ const dataGenerate = (): string => {
 } 
 
 let id = ""
-let unique = ""
+let name = ""
 
 describe("API test using axios", () => {
   test('Should create an interest', async () => {
@@ -36,7 +36,7 @@ describe("API test using axios", () => {
     })
     const [interest] = response.data
     id = interest.id
-    unique = interest.name
+    name = interest.name
 
     expect(response).not.toBeNull()
     expect(response.data).toHaveLength(1)
@@ -71,7 +71,7 @@ describe("API test using axios", () => {
 
   test('Should get an interest from name', async () => {
     const response = await axios({
-      url: `http://localhost:3000/interests/${unique}`,
+      url: `http://localhost:3000/interests/${name}`,
       method: "get",
       responseType: "json",
       validateStatus: function (status) {
@@ -79,6 +79,18 @@ describe("API test using axios", () => {
       },
     })
     expect(response.status).toBe(200)
+  });
+
+  test('Should not get an interest from name', async () => {
+    const response = await axios({
+      url: `http://localhost:3000/interests/new interest`,
+      method: "get",
+      responseType: "json",
+      validateStatus: function (status) {
+        return status >= 400 && status <= 500;
+      },
+    })
+    expect(response.status).toBe(404)
   });
 
   test('Should delete an interest from id', async () => {
