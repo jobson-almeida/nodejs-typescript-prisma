@@ -32,7 +32,7 @@ describe("Interest unit", () => {
       name: "",
       active: true
     }
-    expect(() => Interest.create(input.name, input.active)).toThrow(new InvalidObjectError("Invalid name field content: set a name"))
+    expect(() => Interest.create(input.name, input.active)).toThrow(new InvalidObjectError("Invalid name field content: review name format"))
   })
 
 })
