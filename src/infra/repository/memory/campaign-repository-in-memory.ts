@@ -1,64 +1,27 @@
+import Campaign from "@/domain/entities/campaign";
 import CampaignRepository from "@/domain/repository/campaign-repository";
-import { randomUUID } from "crypto";
-
-type Campaign = {
-  id: string
-  name: string
-  text: string
-  interests: Array<string>
-  startTime: Date
-  endTime: Date
-  status: boolean
-  createdAt: Date
-  updatedAt: Date
-}
-
-type WhereInput = {
-  id?: string
-}
-
-type UpdateInput = {
-  id?: string
-  name?: string
-  text?: string
-  interests?: Array<string>
-  startTime?: Date
-  endTime?: Date
-  status?: boolean
-}
-
-type Input = {
-  id?: string
-  name: string
-  text: string
-  interests: Array<string>
-  startTime: Date
-  endTime: Date
-  status: boolean
-}
-
+ 
 export default class CampaignRepositoryDatabaseInMemory implements CampaignRepository {
   campaign: Campaign
   campaigns: Campaign[]
 
   constructor() { }
 
-  async save(input: Input): Promise<void> {
-    this.campaigns = [
-      {
-        id: randomUUID(),
-        name: input.name,
-        text: input.text,
-        interests: input.interests,
-        startTime: input.startTime,
-        endTime: input.endTime,
-        status: input.status,
-        createdAt: new Date(Date.now()),
-        updatedAt: new Date(Date.now())
-      }
-    ]
+  async save(input: Campaign): Promise<void> {
+    let now: Date
+    let numberOfMlSeconds: number
+    let addMlSeconds: number
+    let after: Date
+  
+      now = new Date(Date.now())
+      numberOfMlSeconds = now.getTime();
+      addMlSeconds = (1 * 60) * 1000;
+      after = new Date(numberOfMlSeconds + addMlSeconds);
+    
+    this.campaigns.push(input)
   }
 
+  /*
   async list(): Promise<Campaign[]> {
     return this.campaigns
   }
@@ -90,4 +53,5 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
     const indexFound = this.campaigns.findIndex((value) => value.id === where.id)
     this.campaigns.splice(indexFound, 1)
   }
+  */
 }
