@@ -21,11 +21,25 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
     this.campaigns.push(input)
   }
 
-  /*
   async list(): Promise<Campaign[]> {
-    return this.campaigns
+    const campaigns: Campaign[] = [];
+    for (const data of this.campaigns) {
+      campaigns.push(new Campaign(
+        data.id,
+        data.name,
+        data.text,
+        data.interests,
+        data.startTime,
+        data.endTime,
+        data.status,
+        data.createdAt,
+        data.updatedAt
+      ));
+    }
+    return campaigns
   }
 
+  /*
   async check(where: WhereInput): Promise<boolean> {
     const campaignFound = this.campaigns.find((value) => value.id === where.id)
     return campaignFound ? true : false
