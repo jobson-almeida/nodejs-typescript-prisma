@@ -42,6 +42,10 @@ describe('Integration test', () => {
     expect(input.active).toBe(interest.active);
   });
 
+  test('Must check non-existent record id', async () => {
+    const existsInterest = await interestRepository.check({ name: "123456" })
+    expect(existsInterest).toBeFalsy()
+  })
 
 });
 
