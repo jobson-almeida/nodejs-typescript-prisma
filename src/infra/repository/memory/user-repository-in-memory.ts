@@ -1,26 +1,11 @@
-import Interest from "@/domain/entities/interest";
 import Post from "@/domain/entities/post";
 import User from "@/domain/entities/user";
 import UserRepository from "@/domain/repository/user-repository";
-import { randomUUID } from "crypto";
-
-/*
-export type User = {
-  id: string
-  name: string
-  email: string
-  interests: Array<string>
-  posts?: Post[] | undefined
-  createdAt: Date
-  updatedAt: Date
-}
-*/
 
 export type WhereInput = {
   id?: string | undefined
   email?: string | undefined
 }
-
 
 export type UpdateInput = {
   id?: string | undefined
@@ -30,28 +15,8 @@ export type UpdateInput = {
   posts?: Post[] | undefined
 }
 
-/*
-export type Input = {
-  id?: string | undefined
-  name: string
-  email: string
-  interests?: Array<string> | undefined
-}
-
-export type Post = {
-  id: string
-  text: string
-  authorId: string
-  createdAt: Date
-  updatedAt: Date
-}
-*/
-
 export default class UserRepositoryDatabaseInMemory implements UserRepository {
-  // user: User
   users: User[]
-  //  post: Post
-  // posts: Post[]
 
   constructor() { }
 
@@ -69,7 +34,7 @@ export default class UserRepositoryDatabaseInMemory implements UserRepository {
         data.id,
         data.name,
         data.email,
-        data.interests, 
+        data.interests,
         undefined,
         data.createdAt,
         data.updatedAt
@@ -89,7 +54,7 @@ export default class UserRepositoryDatabaseInMemory implements UserRepository {
       return new User(userFound.id, userFound.name, userFound.email, userFound.interests, userFound.posts, userFound.createdAt, userFound.updatedAt)
     return null
   }
-  
+
   async check(where: WhereInput): Promise<boolean> {
     const user = this.users.find((value) => value.id === where.id)
     return user ? true : false
@@ -117,5 +82,5 @@ export default class UserRepositoryDatabaseInMemory implements UserRepository {
     const indexFound = this.users.findIndex((value) => value.id || value.email === where)
     this.users.splice(indexFound, 1)
   }
-  
+
 }
