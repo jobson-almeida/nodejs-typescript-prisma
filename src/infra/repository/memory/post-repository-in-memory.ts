@@ -1,13 +1,5 @@
+import Post from "@/domain/entities/post";
 import PostRepository from "@/domain/repository/post-repository";
-import { randomUUID } from "crypto";
-
-type Post = {
-  id: string
-  text: string
-  authorId: string
-  createdAt: Date
-  updatedAt: Date
-}
 
 type WhereInput = {
   id?: string | undefined
@@ -20,28 +12,16 @@ type UpdateInput = {
   authorId?: string | undefined
 }
 
-type Input = {
-  id?: string | undefined
-  text: string
-  authorId: string
-}
-
 export default class PostRepositoryDatabaseInMemory implements PostRepository {
-  post: Post
   posts: Post[]
 
   constructor() { }
 
-  async save(input: Input): Promise<void> {
-    this.posts = [
-      {
-        id: randomUUID(),
-        text: input.text,
-        authorId: input.authorId,
-        createdAt: new Date(Date.now()),
-        updatedAt: new Date(Date.now())
-      }
-    ]
+  async save(data: Post): Promise<void> {
+    this.posts = []
+    data.createdAt = new Date(Date.now())
+    data.updatedAt = new Date(Date.now())
+    this.posts.push(data)
   }
 
   async list(): Promise<Post[]> {
