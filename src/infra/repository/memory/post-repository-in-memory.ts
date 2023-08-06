@@ -25,7 +25,17 @@ export default class PostRepositoryDatabaseInMemory implements PostRepository {
   }
 
   async list(): Promise<Post[]> {
-    return this.posts
+    const posts: Post[] = [];
+    for (const data of this.posts) {
+      posts.push(new Post(
+        data.id,
+        data.text,
+        data.authorId,
+        data.createdAt,
+        data.updatedAt
+      ));
+    }
+    return posts
   }
 
   async check(where: WhereInput): Promise<boolean> {
