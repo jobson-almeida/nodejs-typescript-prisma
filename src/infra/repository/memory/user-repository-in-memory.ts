@@ -12,12 +12,14 @@ export type User = {
   createdAt: Date
   updatedAt: Date
 }
+*/
 
 export type WhereInput = {
   id?: string | undefined
   email?: string | undefined
 }
 
+/*
 export type UpdateInput = {
   id?: string | undefined
   name?: string | undefined
@@ -73,25 +75,20 @@ export default class UserRepositoryDatabaseInMemory implements UserRepository {
     return users
   }
 
-
-  /*
-  async get(where: WhereInput): Promise<User | null> {
-    const user = this.users.find((value) => value.id || value.email === where)
-
+  async get(where: { id?: string, email?: string }): Promise<User | null> {
+    let userFound
     if (where.id) {
-      this.posts = [{
-        id: randomUUID(),
-        text: "first post",
-        authorId: where.id,
-        createdAt: new Date(Date.now()),
-        updatedAt: new Date(Date.now())
-      }]
-      const user_posts = this.posts.find((value) => value.authorId === where)
-      if (user_posts) user?.posts?.push(user_posts)
+      userFound = this.users.find((value) => value.id === where.id)
+    } else {
+      userFound = this.users.find((value) => value.email === where.email)
     }
-    return user ?? null
+    if (userFound)
+      return new User(userFound.id, userFound.name, userFound.email, userFound.interests, userFound.posts, userFound.createdAt, userFound.updatedAt)
+    return null
   }
 
+  /*
+  
   async check(where: WhereInput): Promise<boolean> {
     const user = this.users.find((value) => value.id === where.id)
     return user ? true : false
