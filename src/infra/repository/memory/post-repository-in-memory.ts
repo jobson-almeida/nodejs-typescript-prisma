@@ -2,8 +2,7 @@ import Post from "@/domain/entities/post";
 import PostRepository from "@/domain/repository/post-repository";
 
 type WhereInput = {
-  id?: string | undefined
-  text?: string
+  id: string
 }
 
 type UpdateInput = {
