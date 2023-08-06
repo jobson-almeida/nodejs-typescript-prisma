@@ -1,6 +1,8 @@
+import User from "@/domain/entities/user";
 import UserRepository from "@/domain/repository/user-repository";
 import { randomUUID } from "crypto";
 
+/*
 export type User = {
   id: string
   name: string
@@ -38,26 +40,24 @@ export type Post = {
   createdAt: Date
   updatedAt: Date
 }
+*/
 
 export default class UserRepositoryDatabaseInMemory implements UserRepository {
-  user: User
+ // user: User
   users: User[]
-  post: Post
-  posts: Post[]
+//  post: Post
+ // posts: Post[]
 
   constructor() { }
 
-  async save(data: Input): Promise<void> {
-    this.users = [{
-      id: randomUUID(),
-      name: data?.name,
-      email: data.email,
-      interests: data.interests || [],
-      createdAt: new Date(Date.now()),
-      updatedAt: new Date(Date.now())
-    }]
+  async save(data: User): Promise<void> {
+    this.users = []
+    data.createdAt = new Date(Date.now())
+    data.updatedAt = new Date(Date.now())
+    this.users.push(data)
   }
 
+  /*
   async list(): Promise<User[]> {
     return this.users
   }
@@ -102,4 +102,5 @@ export default class UserRepositoryDatabaseInMemory implements UserRepository {
     const indexFound = this.users.findIndex((value) => value.id || value.email === where)
     this.users.splice(indexFound, 1)
   }
+  */
 }
