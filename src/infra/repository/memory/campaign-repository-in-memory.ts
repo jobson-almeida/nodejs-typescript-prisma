@@ -62,7 +62,6 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
     return campaign ?? null
   }
 
-  /*
   async update(params: { where: WhereInput, data: UpdateInput }): Promise<void> {
     const indexFound = this.campaigns.findIndex((value) => value.id === params.where.id)
     if (indexFound >= 0) {
@@ -74,7 +73,7 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
       if (params.data.status) this.campaigns[indexFound].status = params.data.status
       this.campaigns[indexFound].updatedAt = new Date(Date.now())
     }
-  }*/
+  }
 
   async delete(where: WhereInput): Promise<void> {
     const indexFound = this.campaigns.findIndex((value) => value.id === where.id)
