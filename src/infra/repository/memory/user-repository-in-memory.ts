@@ -1,3 +1,5 @@
+import Interest from "@/domain/entities/interest";
+import Post from "@/domain/entities/post";
 import User from "@/domain/entities/user";
 import UserRepository from "@/domain/repository/user-repository";
 import { randomUUID } from "crypto";
@@ -19,15 +21,16 @@ export type WhereInput = {
   email?: string | undefined
 }
 
-/*
+
 export type UpdateInput = {
   id?: string | undefined
   name?: string | undefined
   email?: string | undefined
+  interests?: string[] | undefined
   posts?: Post[] | undefined
-  interests?: Array<string> | undefined
 }
 
+/*
 export type Input = {
   id?: string | undefined
   name: string
@@ -86,25 +89,27 @@ export default class UserRepositoryDatabaseInMemory implements UserRepository {
       return new User(userFound.id, userFound.name, userFound.email, userFound.interests, userFound.posts, userFound.createdAt, userFound.updatedAt)
     return null
   }
-
-  /*
   
   async check(where: WhereInput): Promise<boolean> {
     const user = this.users.find((value) => value.id === where.id)
     return user ? true : false
   }
 
-  async update(params: {
-    where: WhereInput,
-    data: UpdateInput
-  }
-  ): Promise<void> {
-    const indexFound = this.users.findIndex((value) => value.id === params.where.id)
-    if (indexFound >= 0) {
-      if (params.data.name) this.users[indexFound].name = params.data.name
-      if (params.data.email) this.users[indexFound].email = params.data.email
-      this.users[indexFound].interests = params.data.interests || []
-      this.users[indexFound].updatedAt = new Date(Date.now())
+  async update(params: { where: { id?: string, email?: string }, data: { name: string, email: string, interests: string[], posts: Post[] } }): Promise<void> {
+    const { id, email } = params.where
+    let userIndex
+    if (id) {
+      userIndex = this.users.findIndex((value) => value.id === id)
+    } else {
+      userIndex = this.users.findIndex((value) => value.email === email)
+    }
+
+    if (userIndex >= 0) {
+      this.users[userIndex].name = params.data.name
+      this.users[userIndex].email = params.data.email
+      this.users[userIndex].interests = params.data.interests
+      this.users[userIndex].posts = params.data.posts
+      this.users[userIndex].updatedAt = new Date(Date.now())
     }
   }
 
@@ -112,5 +117,5 @@ export default class UserRepositoryDatabaseInMemory implements UserRepository {
     const indexFound = this.users.findIndex((value) => value.id || value.email === where)
     this.users.splice(indexFound, 1)
   }
-  */
+  
 }
