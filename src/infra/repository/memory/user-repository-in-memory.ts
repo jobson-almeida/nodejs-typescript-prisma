@@ -43,10 +43,10 @@ export type Post = {
 */
 
 export default class UserRepositoryDatabaseInMemory implements UserRepository {
- // user: User
+  // user: User
   users: User[]
-//  post: Post
- // posts: Post[]
+  //  post: Post
+  // posts: Post[]
 
   constructor() { }
 
@@ -57,11 +57,24 @@ export default class UserRepositoryDatabaseInMemory implements UserRepository {
     this.users.push(data)
   }
 
-  /*
   async list(): Promise<User[]> {
-    return this.users
+    const users: User[] = [];
+    for (const data of this.users) {
+      users.push(new User(
+        data.id,
+        data.name,
+        data.email,
+        data.interests, 
+        undefined,
+        data.createdAt,
+        data.updatedAt
+      ));
+    }
+    return users
   }
 
+
+  /*
   async get(where: WhereInput): Promise<User | null> {
     const user = this.users.find((value) => value.id || value.email === where)
 
