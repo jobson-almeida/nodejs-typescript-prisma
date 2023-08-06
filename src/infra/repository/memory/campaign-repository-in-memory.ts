@@ -1,6 +1,19 @@
 import Campaign from "@/domain/entities/campaign";
 import CampaignRepository from "@/domain/repository/campaign-repository";
- 
+
+type WhereInput = {
+  id: string
+}
+
+type UpdateInput = {
+  name?: string
+  text?: string
+  interests?: string[]
+  startTime?: Date
+  endTime?: Date
+  status?: boolean
+}
+
 export default class CampaignRepositoryDatabaseInMemory implements CampaignRepository {
   campaign: Campaign
   campaigns: Campaign[]
@@ -12,12 +25,12 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
     let numberOfMlSeconds: number
     let addMlSeconds: number
     let after: Date
-  
-      now = new Date(Date.now())
-      numberOfMlSeconds = now.getTime();
-      addMlSeconds = (1 * 60) * 1000;
-      after = new Date(numberOfMlSeconds + addMlSeconds);
-    
+
+    now = new Date(Date.now())
+    numberOfMlSeconds = now.getTime();
+    addMlSeconds = (1 * 60) * 1000;
+    after = new Date(numberOfMlSeconds + addMlSeconds);
+
     this.campaigns.push(input)
   }
 
@@ -39,7 +52,6 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
     return campaigns
   }
 
-  /*
   async check(where: WhereInput): Promise<boolean> {
     const campaignFound = this.campaigns.find((value) => value.id === where.id)
     return campaignFound ? true : false
@@ -50,6 +62,7 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
     return campaign ?? null
   }
 
+  /*
   async update(params: { where: WhereInput, data: UpdateInput }): Promise<void> {
     const indexFound = this.campaigns.findIndex((value) => value.id === params.where.id)
     if (indexFound >= 0) {
@@ -61,11 +74,11 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
       if (params.data.status) this.campaigns[indexFound].status = params.data.status
       this.campaigns[indexFound].updatedAt = new Date(Date.now())
     }
-  }
+  }*/
 
   async delete(where: WhereInput): Promise<void> {
     const indexFound = this.campaigns.findIndex((value) => value.id === where.id)
     this.campaigns.splice(indexFound, 1)
   }
-  */
+
 }
