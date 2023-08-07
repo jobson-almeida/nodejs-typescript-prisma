@@ -3,9 +3,10 @@ import axios from "axios"
 import { randomUUID } from "crypto";
 import { describe, test, expect } from "vitest"
 
-let id = ""
+describe("Campaign api", () => {
+  let id = ""
+  let idInterest = ""
 
-describe.skip("Campaign api", () => {
   const now = new Date(Date.now())
   const numberOfMlSeconds = now.getTime();
   const addMlSeconds = (1 * 60) * 1000;
@@ -24,7 +25,7 @@ describe.skip("Campaign api", () => {
         return status >= 200 && status < 299;
       },
     })
- 
+
     const responseInterest = await axios({
       url: "http://localhost:3000/interests/",
       method: "get",
@@ -34,8 +35,8 @@ describe.skip("Campaign api", () => {
       },
     })
     const [newInterest] = responseInterest.data
-    const idInterest = newInterest.id
- 
+    idInterest = newInterest.id
+
     const response = await axios({
       url: "http://localhost:3000/campaigns/",
       method: "post",
@@ -86,8 +87,8 @@ describe.skip("Campaign api", () => {
     expect(campaign.endTime).toEqual(expect.stringContaining("endTime"))
     expect(campaign.active).toBeTruthy()
     expect(response.status).toBe(200)
-  }); 
-  
+  });
+
   test('Should get an campaign from id', async () => {
     const response = await axios({
       url: `http://localhost:3000/campaigns/${id}`,
@@ -110,7 +111,7 @@ describe.skip("Campaign api", () => {
       },
     })
     expect(response.status).toBe(404)
-  }); 
+  });
 
   test('Should update an campaign', async () => {
     const response = await axios({
@@ -119,10 +120,10 @@ describe.skip("Campaign api", () => {
       data: {
         name: `name${randomUUID()}`,
         text: `text${randomUUID()}`,
-        interests: [""enter data to create test record Create],
+        interests: [`${idInterest}`],
         startTime: now,
         endTime: after,
-        status: true 
+        status: true
       },
       validateStatus: function (status) {
         return status >= 200 && status < 299;
@@ -140,7 +141,18 @@ describe.skip("Campaign api", () => {
         return status >= 200 && status < 299;
       },
     })
+
+    const removeInterest = await axios({
+      url: `http://localhost:4000/interests/${id}`,
+      method: "delete",
+      responseType: "json",
+      validateStatus: function (status) {
+        return status >= 200 && status < 299;
+      },
+    })
+
     expect(response.status).toBe(204)
+    expect(removeInterest.status).toBe(204)
   });
 
 });
