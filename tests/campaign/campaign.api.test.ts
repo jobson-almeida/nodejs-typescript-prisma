@@ -134,7 +134,7 @@ describe("Campaign api", () => {
 
   test('Should delete am campaign', async () => {
     const response = await axios({
-      url: `http://localhost:4000/campaign/${id}`,
+      url: `http://localhost:3000/campaign/${id}`,
       method: "delete",
       responseType: "json",
       validateStatus: function (status) {
@@ -143,7 +143,7 @@ describe("Campaign api", () => {
     })
 
     const removeInterest = await axios({
-      url: `http://localhost:4000/interests/${id}`,
+      url: `http://localhost:3000/interests/${id}`,
       method: "delete",
       responseType: "json",
       validateStatus: function (status) {
