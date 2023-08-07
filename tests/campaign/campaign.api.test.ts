@@ -79,9 +79,9 @@ describe.skip("Campaign api", () => {
     expect(response.status).toBe(404)
   }); 
 
-  test('Should updatecreate an interest', async () => {
+  test('Should update an campaign', async () => {
     const response = await axios({
-      url: `"http://localhost:3000/interests/${id}`,
+      url: `"http://localhost:3000/campaigns/${id}`,
       method: "put",
       data: {
         name: `name${randomUUID()}`,
@@ -98,6 +98,17 @@ describe.skip("Campaign api", () => {
     expect(response.status).toBe(201)
   });
 
+  test('Should delete am campaign', async () => {
+    const response = await axios({
+      url: `http://localhost:4000/campaign/${id}`,
+      method: "delete",
+      responseType: "json",
+      validateStatus: function (status) {
+        return status >= 200 && status < 299;
+      },
+    })
+    expect(response.status).toBe(204)
+  });
 
 });
 
