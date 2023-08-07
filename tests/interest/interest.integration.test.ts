@@ -88,14 +88,19 @@ describe('Integration test', () => {
       await interestRepository.update({
         where: { id },
         data: interest
-      }) 
+      })
+
+      const updatedInterest = await interestRepository.get({ id })
 
       expect(existsInterest).toBeFalsy()
-      expect(interestFromId).not.toBeNull() 
+      expect(interestFromId).not.toBeNull()
+      expect(updatedInterest?.name).toBe(interest.name);
+      expect(updatedInterest?.active).toBe(interest.active);
       expect(interestFromName?.name).not.toBe(interest.name);
       expect(interestFromName?.active).not.toBe(interest.active);
     }
   })
+
 
 });
 

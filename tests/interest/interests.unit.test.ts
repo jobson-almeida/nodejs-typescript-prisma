@@ -14,12 +14,16 @@ function dataGenerate(): string {
 }
 
 describe("Interest unit", () => {
+  let id = ""
+
   test("Should create interest unit", () => {
     const input = {
       name: `interest ${dataGenerate()}`,
       active: true
     }
     const interest = Interest.create(input.name, input.active) 
+  console.log(interest)
+  
     expect(interest.name).toEqual(input.name)
     expect(interest.active).toBeTruthy()
     expect(interest.id).not.toBeUndefined()
