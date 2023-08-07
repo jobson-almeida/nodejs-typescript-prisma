@@ -1,3 +1,4 @@
+import Interest from "@/domain/entities/interest";
 import axios from "axios"
 import { randomUUID } from "crypto";
 import { describe, test, expect } from "vitest"
@@ -11,6 +12,30 @@ describe.skip("Campaign api", () => {
   const after = new Date(numberOfMlSeconds + addMlSeconds);
 
   test('Should create an campaign', async () => {
+    await axios({
+      url: "http://localhost:3000/interests/",
+      method: "post",
+      responseType: "json",
+      data: {
+        name: `name ${randomUUID()}`,
+        active: true
+      },
+      validateStatus: function (status) {
+        return status >= 200 && status < 299;
+      },
+    })
+ 
+    const responseInterest = await axios({
+      url: "http://localhost:3000/interests/",
+      method: "get",
+      responseType: "json",
+      validateStatus: function (status) {
+        return status >= 200 && status < 299;
+      },
+    })
+    const [newInterest] = responseInterest.data
+    const idInterest = newInterest.id
+ 
     const response = await axios({
       url: "http://localhost:3000/campaigns/",
       method: "post",
@@ -18,7 +43,7 @@ describe.skip("Campaign api", () => {
       data: {
         name: `name ${randomUUID()}`,
         text: `text ${randomUUID()}`,
-        interests: ["60a70b4c-ee23-42bd-8bcf-dc4a48665958"], //use a valid database interest ID
+        interests: [`${idInterest}`],
         startTime: now,
         endTime: after,
         status: true,
@@ -94,7 +119,7 @@ describe.skip("Campaign api", () => {
       data: {
         name: `name${randomUUID()}`,
         text: `text${randomUUID()}`,
-        interests: [],
+        interests: [""enter data to create test record Create],
         startTime: now,
         endTime: after,
         status: true 
