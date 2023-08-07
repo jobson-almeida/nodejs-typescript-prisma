@@ -15,6 +15,14 @@ describe.skip("Campaign api", () => {
       url: "http://localhost:3000/campaigns/",
       method: "post",
       responseType: "json",
+      data: {
+        name: `name ${randomUUID()}`,
+        text: `text ${randomUUID()}`,
+        interests: ["60a70b4c-ee23-42bd-8bcf-dc4a48665958"], //use a valid database interest ID
+        startTime: now,
+        endTime: after,
+        status: true,
+      },
       validateStatus: function (status) {
         return status >= 200 && status < 299;
       },
