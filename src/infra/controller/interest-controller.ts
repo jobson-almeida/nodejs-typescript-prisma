@@ -8,16 +8,15 @@ import { Status as status } from "../http/errors/http-helper";
 import InterestExistsError from "../http/errors/interest-exists";
 import NotFoundError from "../http/errors/not-found-error";
 import { Http, Method } from "../http/Http";
-import  CheckParams  from "./check-params";
-
+import CheckParams from "./check-params";
 
 type ParamsProps = {
   unique?: string
   id?: string
-  name?:string
+  name?: string
 }
 
-type BodyProps = { 
+type BodyProps = {
   name: string
   active: boolean
 }
@@ -36,7 +35,7 @@ export default class InterestController {
       try {
         await saveInterest.execute(body);
         return status.created()
-      } catch (error) { 
+      } catch (error) {
         if (error instanceof InvalidObjectError) return status.badRequest(error)
         if (error instanceof InterestExistsError) return status.conflict(error)
         if (error instanceof Error) return status.internalServerError()
@@ -51,17 +50,16 @@ export default class InterestController {
         if (error instanceof Error) return status.internalServerError()
       }
     });
- 
+
     http.build(Method.GET, "/interests/:unique", async function (params: ParamsProps) {
-      let paramsChecked = {}    
+      let paramsChecked = {}
       try {
         if (params.unique) {
-          paramsChecked =  CheckParams.validade(params.unique) 
+          paramsChecked = CheckParams.validade(params.unique)
         }
         const interestFound = await getInterest.execute(paramsChecked)
         return status.success(interestFound)
       } catch (error) {
-        console.log(error)
         if (error instanceof NotFoundError) return status.notFound(error)
         if (error instanceof Error) return status.internalServerError()
       }
@@ -69,16 +67,14 @@ export default class InterestController {
 
     http.build(Method.PUT, "/interests/:unique", async function (params: ParamsProps, body: BodyProps) {
       const { name, active } = body
-      let paramsChecked = {}    
+      let paramsChecked = {}
       try {
         if (params.unique) {
-          paramsChecked =  CheckParams.validade(params.unique) 
+          paramsChecked = CheckParams.validade(params.unique)
         }
         await updateInterest.execute({ where: paramsChecked, data: { name, active } })
         return status.noContent()
       } catch (error) {
-        
-        console.log(error)
         if (error instanceof InvalidObjectError) return status.badRequest(error)
         if (error instanceof NotFoundError) return status.notFound(error)
         if (error instanceof InterestExistsError) return status.conflict(error)
@@ -87,8 +83,8 @@ export default class InterestController {
     });
 
     http.build(Method.DELETE, "/interests/:id", async function (params: ParamsProps) {
-      try { 
-        await deleteInterest.execute({id:params.id})
+      try {
+        await deleteInterest.execute({ id: params.id })
         return status.noContent()
       } catch (error) {
         if (error instanceof NotFoundError) return status.notFound(error)
