@@ -74,6 +74,28 @@ describe('Integration test', () => {
     const interestFound = await interestRepository.get({ name: "non-existent name" })
     expect(interestFound).toBeNull()
   });
- 
+
+  test('Should update an interest from id', async () => {
+    const interestFromId = await interestRepository.get({ id })
+    const interestFromName = await interestRepository.get({ name })
+    const existsInterest = interestFromId?.id !== interestFromName?.id
+
+    if (interestFromId && !existsInterest) {
+      interestFromId.build(`name ${dataGenerate()}`, false)
+
+      const interest = { name: interestFromId.name, active: interestFromId.active }
+
+      await interestRepository.update({
+        where: { id },
+        data: interest
+      }) 
+
+      expect(existsInterest).toBeFalsy()
+      expect(interestFromId).not.toBeNull() 
+      expect(interestFromName?.name).not.toBe(interest.name);
+      expect(interestFromName?.active).not.toBe(interest.active);
+    }
+  })
+
 });
 
