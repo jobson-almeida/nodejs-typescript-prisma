@@ -62,6 +62,18 @@ describe.skip("Campaign api", () => {
     expect(response.status).toBe(200)
   });
 
+  test('Should not get an campaign from id', async () => {
+    const response = await axios({
+      url: `http://localhost:3000/campaigns/1`,
+      method: "get",
+      responseType: "json",
+      validateStatus: function (status) {
+        return status >= 400 && status <= 500;
+      },
+    })
+    expect(response.status).toBe(404)
+  }); 
+
 
 });
 
