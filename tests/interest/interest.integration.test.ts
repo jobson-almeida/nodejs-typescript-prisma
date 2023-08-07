@@ -101,6 +101,10 @@ describe('Integration test', () => {
     }
   })
 
-
+  test('Should delete interest from id', async () => {
+    await interestRepository.delete({ id  })
+    const deletedInterest = await interestRepository.get({id})
+    expect(deletedInterest).toBeNull()
+  });
 });
 
