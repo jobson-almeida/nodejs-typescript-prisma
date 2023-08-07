@@ -5,6 +5,11 @@ import { describe, test, expect } from "vitest"
 let id = ""
 
 describe.skip("Campaign api", () => {
+  const now = new Date(Date.now())
+  const numberOfMlSeconds = now.getTime();
+  const addMlSeconds = (1 * 60) * 1000;
+  const after = new Date(numberOfMlSeconds + addMlSeconds);
+
   test('Should create an campaign', async () => {
     const response = await axios({
       url: "http://localhost:3000/campaigns/",
@@ -73,6 +78,25 @@ describe.skip("Campaign api", () => {
     })
     expect(response.status).toBe(404)
   }); 
+
+  test('Should updatecreate an interest', async () => {
+    const response = await axios({
+      url: `"http://localhost:3000/interests/${id}`,
+      method: "put",
+      data: {
+        name: `name${randomUUID()}`,
+        text: `text${randomUUID()}`,
+        interests: [],
+        startTime: now,
+        endTime: after,
+        status: true 
+      },
+      validateStatus: function (status) {
+        return status >= 200 && status < 299;
+      },
+    })
+    expect(response.status).toBe(201)
+  });
 
 
 });
