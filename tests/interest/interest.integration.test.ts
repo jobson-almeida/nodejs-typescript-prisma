@@ -1,4 +1,3 @@
-import InvalidObjectError from "@/domain/entities/errors/invalid-object";
 import Interest from "@/domain/entities/interest";
 import InterestRepositoryDatabaseInMemory from "@/infra/repository/memory/interest-repository-in-memory";
 import { randomUUID } from "crypto";
@@ -102,8 +101,8 @@ describe('Integration test', () => {
   })
 
   test('Should delete interest from id', async () => {
-    await interestRepository.delete({ id  })
-    const deletedInterest = await interestRepository.get({id})
+    await interestRepository.delete({ id })
+    const deletedInterest = await interestRepository.get({ id })
     expect(deletedInterest).toBeNull()
   });
 });
