@@ -58,4 +58,16 @@ describe("Campaign unit", () => {
     expect(() => Campaign.create(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)).toThrow(new InvalidObjectError("Invalid text field content: set a text"))    
   })
 
+  test("Should not create campaign unit without valid interest id format", () => {
+    const input = {
+      name: `name ${randomUUID()}`,
+      text: `text ${randomUUID()}`,
+      interests: ["1"],
+      startTime: now,
+      endTime: after,
+      status: true,
+    }
+  
+    expect(() => Campaign.create(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)).toThrow(new InvalidObjectError("Invalid interest"))    
+  })
 })
