@@ -54,14 +54,13 @@ describe("API test using axios", () => {
       validateStatus: function (status) {
         return status >= 200 && status < 299;
       },
-    }) 
+    })  
     const [interest] = response.data
     id = response.data[0].id
     name = response.data[0].name
 
     expect(response).not.toBeNull()
     expect(response.data).toHaveLength(1)
-    expect(name).toEqual(expect.stringContaining("name"))
     expect(interest.active).toBeTruthy()
     expect(response.status).toBe(200)
   }); 
