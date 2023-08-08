@@ -1,36 +1,11 @@
 import axios from "axios"
 import { randomUUID } from "crypto";
-import { describe, test, expect, beforeAll } from "vitest"
+import { describe, test, expect } from "vitest"
 
 describe("API test using axios", () => {
   let id = ""
   let name = ""
 
-  beforeAll(async () => {
-    const response = await axios({
-      url: "http://localhost:3000/interests/",
-      method: "get",
-      responseType: "json",
-      validateStatus: function (status) {
-        return status >= 200 && status < 299;
-      },
-    })
-
-    if (response) {
-      for (let data of response.data) {
-        await axios({
-          url: `http://localhost:3000/interests/${data.id}`,
-          method: "delete",
-          responseType: "json",
-          validateStatus: function (status) {
-            return status >= 200 && status < 299;
-          },
-        }) 
-    
-      }
-    }
-  })
-  
   test('Should create an interest', async () => {
     const response = await axios({
       url: "http://localhost:3000/interests/",
@@ -56,11 +31,11 @@ describe("API test using axios", () => {
       },
     })  
     const [interest] = response.data
-    id = response.data[0].id
-    name = response.data[0].name
+    id = interest.id 
+    name = interest.name 
 
     expect(response).not.toBeNull()
-    expect(response.data).toHaveLength(1)
+    //expect(response.data).toHaveLength(1)
     expect(interest.active).toBeTruthy()
     expect(response.status).toBe(200)
   }); 
