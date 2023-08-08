@@ -13,7 +13,7 @@ export default class InterestRepositoryDatabaseInMemory implements InterestRepos
     data.createdAt = now
     data.updatedAt = now
     data && this.interests.push(data) 
-  }
+   }
 
   async list(ids?: string[]): Promise<Interest[]> {
     let output: Interest[] = [];

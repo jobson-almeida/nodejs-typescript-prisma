@@ -3,26 +3,14 @@ import Interest from "@/domain/entities/interest"
 import PrismaClientAdapter from "@/infra/database/prisma-client-adapter"
 import { randomUUID } from "crypto"
 import { describe, test, expect } from "vitest"
-
-type Input = {
-  name: string
-  active: any
-}
-
-function dataGenerate(): string {
-  return randomUUID()
-}
-
+ 
 describe("Interest unit", () => {
-  let id = ""
-
   test("Should create interest unit", () => {
     const input = {
-      name: `interest ${dataGenerate()}`,
+      name: `interest ${randomUUID()}`,
       active: true
     }
     const interest = Interest.create(input.name, input.active) 
-  console.log(interest)
   
     expect(interest.name).toEqual(input.name)
     expect(interest.active).toBeTruthy()

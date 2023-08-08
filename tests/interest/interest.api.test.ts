@@ -1,21 +1,42 @@
 import axios from "axios"
 import { randomUUID } from "crypto";
-import { describe, test, expect } from "vitest"
-
-const dataGenerate = (): string => {
-  return randomUUID()
-} 
-
-let id = ""
-let name = ""
+import { describe, test, expect, beforeAll } from "vitest"
 
 describe("API test using axios", () => {
+  let id = ""
+  let name = ""
+
+  beforeAll(async () => {
+    const response = await axios({
+      url: "http://localhost:3000/interests/",
+      method: "get",
+      responseType: "json",
+      validateStatus: function (status) {
+        return status >= 200 && status < 299;
+      },
+    })
+
+    if (response) {
+      for (let data of response.data) {
+        await axios({
+          url: `http://localhost:3000/interests/${data.id}`,
+          method: "delete",
+          responseType: "json",
+          validateStatus: function (status) {
+            return status >= 200 && status < 299;
+          },
+        }) 
+    
+      }
+    }
+  })
+  
   test('Should create an interest', async () => {
     const response = await axios({
       url: "http://localhost:3000/interests/",
       method: "post",
       data: {
-        name: `name${dataGenerate()}`,
+        name: `name ${randomUUID()}`,
         active: true
       },
       validateStatus: function (status) {
@@ -33,14 +54,14 @@ describe("API test using axios", () => {
       validateStatus: function (status) {
         return status >= 200 && status < 299;
       },
-    })
+    }) 
     const [interest] = response.data
-    id = interest.id
-    name = interest.name
+    id = response.data[0].id
+    name = response.data[0].name
 
     expect(response).not.toBeNull()
     expect(response.data).toHaveLength(1)
-    expect(interest.name).toEqual(expect.stringContaining("name"))
+    expect(name).toEqual(expect.stringContaining("name"))
     expect(interest.active).toBeTruthy()
     expect(response.status).toBe(200)
   }); 
@@ -93,7 +114,22 @@ describe("API test using axios", () => {
     expect(response.status).toBe(404)
   });
 
-  test('Should delete an interest from id', async () => {
+  test('Should update an interest', async () => {
+    const response = await axios({
+      url: `http://localhost:3000/interests/${id}`,
+      method: "put",
+      data: {
+        name: `name ${randomUUID()}`,
+        active: false
+      },
+      validateStatus: function (status) {
+        return status >= 200 && status < 299;
+      },
+    })
+    expect(response.status).toBe(204)
+  });
+
+  test('Should delete an interest from id', async () => {   
     const response = await axios({
       url: `http://localhost:3000/interests/${id}`,
       method: "delete",
@@ -101,7 +137,7 @@ describe("API test using axios", () => {
       validateStatus: function (status) {
         return status >= 200 && status < 299;
       },
-    })
+    }) 
     expect(response.status).toBe(204)
   });
 

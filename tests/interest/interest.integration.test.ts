@@ -1,7 +1,7 @@
 import Interest from "@/domain/entities/interest";
 import InterestRepositoryDatabaseInMemory from "@/infra/repository/memory/interest-repository-in-memory";
 import { randomUUID } from "crypto";
-import { describe, expect, test } from "vitest"
+import { beforeAll, describe, expect, test } from "vitest"
 
 
 const dataGenerate = (): string => {
@@ -15,6 +15,15 @@ let name = ""
 let active = true
 
 describe('Integration test', () => {
+
+  beforeAll(async () => {
+    const interests: Interest[] = await interestRepository.list()
+    if (interests) {
+      for (let data of interests) {
+        await interestRepository.delete({ id: data.id })
+      }
+    }
+  })
 
   test('It should check, create and list an interest', async () => {
     const input = {
@@ -40,7 +49,7 @@ describe('Integration test', () => {
     expect(interestsFound).toHaveLength(1)
     expect(input.name).toBe(interest.name);
     expect(input.active).toBe(interest.active);
-  });
+  })
 
   test('Must check non-existent record id', async () => {
     const existsInterest = await interestRepository.check({ id: "123456" })
@@ -56,23 +65,23 @@ describe('Integration test', () => {
     const interestFound = await interestRepository.get({ id })
     expect(interestFound).not.toBeNull()
     expect(interestFound?.id).toEqual(id)
-  });
+  })
 
   test('Should not get interest from invalid id or not found', async () => {
     const interestFound = await interestRepository.get({ id: "invalid or non-existent ID" })
     expect(interestFound).toBeNull()
-  });
+  })
 
   test('Should get an interest from name', async () => {
     const interestFound = await interestRepository.get({ name })
     expect(interestFound).not.toBeNull()
     expect(interestFound?.name).toEqual(name)
-  });
+  })
 
   test('Should not get interest from name valid non-existent', async () => {
     const interestFound = await interestRepository.get({ name: "non-existent name" })
     expect(interestFound).toBeNull()
-  });
+  })
 
   test('Should update an interest from id', async () => {
     const interestFromId = await interestRepository.get({ id })
@@ -104,6 +113,7 @@ describe('Integration test', () => {
     await interestRepository.delete({ id })
     const deletedInterest = await interestRepository.get({ id })
     expect(deletedInterest).toBeNull()
-  });
+  })
+
 });
 
