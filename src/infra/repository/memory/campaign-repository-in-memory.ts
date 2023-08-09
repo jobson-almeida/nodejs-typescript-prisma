@@ -38,7 +38,7 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
   }
 
   async list(): Promise<Campaign[]> {
-    let output: Campaign[] = [];
+  /*  let output: Campaign[] = [];
      
     for (const data of this.campaigns) {
       this.campaigns.push(new Campaign(
@@ -52,7 +52,7 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
         data.createdAt,
         data.updatedAt
       ));
-    }
+    }*/
     return this.campaigns
   }
 
