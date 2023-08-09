@@ -8,7 +8,11 @@ describe("Campaign unit", () => {
   const numberOfMlSeconds = now.getTime();
   const addMlSeconds = (1 * 60) * 1000;
   const after = new Date(numberOfMlSeconds + addMlSeconds);
-
+  let campaign: Campaign
+  let name = ""
+  let text = ""
+  let interests:string[] = []
+  
   test("Should create campaign unit", () => {
     const input = {
       name: `name ${randomUUID()}`,
@@ -18,7 +22,10 @@ describe("Campaign unit", () => {
       endTime: after,
       status: true,
     }
-    const campaign = Campaign.create(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)
+    campaign = Campaign.create(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)
+    name = campaign.name
+    text = campaign.text
+    interests.push(campaign.interests[0])
 
     expect(campaign.name).toEqual(input.name)
     expect(campaign.text).toEqual(input.text)
@@ -30,8 +37,8 @@ describe("Campaign unit", () => {
     expect(campaign.id).not.toBeUndefined()
     expect(campaign.createdAt).toBeUndefined()
     expect(campaign.updatedAt).toBeUndefined()
-  })
-
+  }) 
+  
   test("Should not create campaign unit without valid name", () => {
     const input = {
       name: "",
@@ -82,5 +89,29 @@ describe("Campaign unit", () => {
     }
   
     expect(() => Campaign.create(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)).toThrow(new InvalidObjectError("Invalid date range"))    
+  })
+
+  test("Should update campaign", () => {
+    const input = {
+      name: `name ${randomUUID()}`,
+      text: `text ${randomUUID()}`,
+      interests: [`${randomUUID()}`],
+      startTime: now,
+      endTime: after,
+      status: true,
+    }
+     
+    campaign.build(
+      input.name, 
+      input.text,
+      input.interests,
+      input.startTime,
+      input.endTime,
+      input.status
+      )
+      
+      expect(campaign.name).not.toEqual(name)
+      expect(campaign.text).not.toEqual(text)
+      expect(campaign.interests).not.toContain(interests)
   })
 })
