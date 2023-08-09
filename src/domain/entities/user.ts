@@ -1,6 +1,7 @@
 import InvalidEmailError from "./errors/invalid-email"
 import InvalidObjectError from "./errors/invalid-object"
 import InvalidUUIDError from "./errors/invalid-uuid"
+import Util from "./util"
 
 type Post = {
   id: string
@@ -45,15 +46,11 @@ export default class User {
       this.updatedAt = updatedAt!
     }
 
-    if (!this.name) throw new InvalidObjectError("Invalid name field content: set a name")
-    const regexEmail = /^\w+([.]\w+)*@\w+\.\w{2,8}(\.\w{2})?$/
-    if (!regexEmail.test(this.email)) throw new InvalidEmailError()
-
-    const regexUUID = /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i
-    if (this.interests && this.interests.length > 0) {
-      for (let id of this.interests) {
-        if (regexUUID.test(id) === false) throw new InvalidUUIDError("Invalid interest")
-      }
+    if (!Util.validateString(this.name)) throw new InvalidObjectError("Invalid name field content: set a name")
+    if (!Util.validateEmail(this.email)) throw new InvalidEmailError()
+    if (this.interests.length === 0) throw new InvalidUUIDError("Invalid interest")
+    for (let id of this.interests) {
+      if (!Util.validateUUID(id)) throw new InvalidUUIDError("Invalid interest")
     }
   }
 
@@ -63,8 +60,6 @@ export default class User {
   }
 
   public build(name: string, email: string, interests: string[]) {
-    const regexEmail = /^\w+([.]\w+)*@\w+\.\w{2,8}(\.\w{2})?$/
-    if (!regexEmail.test(email)) throw new InvalidEmailError()
     this.name = name
     this.email = email
     this.interests = interests

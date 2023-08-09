@@ -5,9 +5,14 @@ export default class Util {
   }
 
   static validateBoolean(value: any): boolean {
-    if (typeof value === "boolean") 
+    if (typeof value === "boolean")
       return true
     return false
+  }
+
+  static validateEmail(value: string): boolean {
+    const regexEmail = /^\w+([.]\w+)*@\w+\.\w{2,8}(\.\w{2})?$/
+    return regexEmail.test(value)
   }
 
   static validateString(value: string): boolean {
