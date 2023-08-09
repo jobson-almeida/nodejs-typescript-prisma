@@ -70,4 +70,17 @@ describe("Campaign unit", () => {
   
     expect(() => Campaign.create(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)).toThrow(new InvalidObjectError("Invalid interest"))    
   })
+
+  test("Should not create campaign unit without valid date range", () => {
+    const input = {
+      name: `name ${randomUUID()}`,
+      text: `text ${randomUUID()}`,
+      interests: [`${randomUUID()}`],
+      startTime: after,
+      endTime: now,
+      status: true,
+    }
+  
+    expect(() => Campaign.create(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)).toThrow(new InvalidObjectError("Invalid date range"))    
+  })
 })
