@@ -76,4 +76,35 @@ describe('Integration test', () => {
         const campaignFound = await campaignRepository.get({ id: "1" })
         expect(campaignFound).toBeNull()
     })
+
+    test('It should update an campaign', async () => {
+        const input = {
+            name: `name ${randomUUID()}`,
+            text: `text ${randomUUID()}`,
+            interests: [`${randomUUID()}`],
+            startTime: now,
+            endTime: after,
+            status: false
+        };
+
+        const campaignFound = await campaignRepository.get({ id })
+        campaignFound && campaignFound.build(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)
+        const campaign = {
+            name: campaignFound?.name,
+            text: campaignFound?.text,
+            interests: campaignFound?.interests,
+            startTime: campaignFound?.startTime,
+            endTime: campaignFound?.endTime,
+            status: campaignFound?.status,
+            updatedAt: now
+        }
+        await campaignRepository.update({ where: { id }, data: campaign })
+
+        expect(campaign.name).not.toEqual(name)
+        expect(campaign.text).not.toEqual(text);
+        expect(campaign.interests).not.toEqual(interests);
+        expect(campaign.status).not.toEqual(status);
+        expect(campaign.updatedAt).not.toEqual(campaignFound?.updatedAt);
+    })
+
 })
