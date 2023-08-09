@@ -18,9 +18,10 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
   campaign: Campaign
   campaigns: Campaign[]
 
-  constructor() { }
+  constructor() {}
 
   async save(input: Campaign): Promise<void> {
+    this.campaigns = []
     let now: Date
     let numberOfMlSeconds: number
     let addMlSeconds: number
@@ -31,13 +32,16 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
     addMlSeconds = (1 * 60) * 1000;
     after = new Date(numberOfMlSeconds + addMlSeconds);
 
-    this.campaigns.push(input)
+    input.createdAt = now
+    input.updatedAt = now
+    input && this.campaigns.push(input)
   }
 
   async list(): Promise<Campaign[]> {
-    const campaigns: Campaign[] = [];
+    let output: Campaign[] = [];
+     
     for (const data of this.campaigns) {
-      campaigns.push(new Campaign(
+      this.campaigns.push(new Campaign(
         data.id,
         data.name,
         data.text,
@@ -49,7 +53,7 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
         data.updatedAt
       ));
     }
-    return campaigns
+    return this.campaigns
   }
 
   async check(where: WhereInput): Promise<boolean> {

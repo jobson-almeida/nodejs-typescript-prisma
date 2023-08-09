@@ -4,7 +4,7 @@ import InterestRepository from "@/domain/repository/interest-repository";
 export default class InterestRepositoryDatabaseInMemory implements InterestRepository {
   interests: Interest[]
 
-  constructor() {}
+  constructor() { }
 
   async save(data: Interest): Promise<void> {
     this.interests = []
@@ -12,33 +12,29 @@ export default class InterestRepositoryDatabaseInMemory implements InterestRepos
 
     data.createdAt = now
     data.updatedAt = now
-    data && this.interests.push(data) 
-   }
+    data && this.interests.push(data)
+  }
 
   async list(ids?: string[]): Promise<Interest[]> {
     let output: Interest[] = [];
     let interestsFound = []
 
-    try {
-      if (ids && ids.length > 0) {
-        for (const id of ids) {
-          interestsFound.push(this.interests.find((value) => value.id === id))
-        }
+    if (ids && ids.length > 0) {
+      for (const id of ids) {
+        interestsFound.push(this.interests.find((value) => value.id === id))
+      }
 
-        for (const data of interestsFound) {
-          data &&
-            this.interests.push(new Interest(data.id, data.name, data.active, data.createdAt, data.updatedAt))
-        }
+      for (const data of interestsFound) {
+        data &&
+          this.interests.push(new Interest(data.id, data.name, data.active, data.createdAt, data.updatedAt))
+      }
 
-        output = output.sort(function (a, b) {
-          const dateA = new Date(a.createdAt).getTime();
-          const dateB = new Date(b.createdAt).getTime();
-          return dateA < dateB ? 1 : -1;
-        });
-        return output
-      }  
-    } catch (error) {
-      //console.log(error)
+      output = output.sort(function (a, b) {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return dateA < dateB ? 1 : -1;
+      });
+      return output
     }
     return this.interests
   }
@@ -85,10 +81,10 @@ export default class InterestRepositoryDatabaseInMemory implements InterestRepos
       this.interests[interestIndex].active = params.data.active
     }
   }
- 
+
   async delete(where: { id: string }): Promise<void> {
     const indexFound = this.interests.findIndex((value) => value.id === where.id)
-    this.interests.splice(indexFound, 1) 
+    this.interests.splice(indexFound, 1)
   }
 
 }
