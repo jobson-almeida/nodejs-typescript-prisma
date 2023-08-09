@@ -38,21 +38,6 @@ export default class CampaignRepositoryDatabaseInMemory implements CampaignRepos
   }
 
   async list(): Promise<Campaign[]> {
-  /*  let output: Campaign[] = [];
-     
-    for (const data of this.campaigns) {
-      this.campaigns.push(new Campaign(
-        data.id,
-        data.name,
-        data.text,
-        data.interests,
-        data.startTime,
-        data.endTime,
-        data.status,
-        data.createdAt,
-        data.updatedAt
-      ));
-    }*/
     return this.campaigns
   }
 
