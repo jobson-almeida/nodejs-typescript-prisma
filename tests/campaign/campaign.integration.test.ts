@@ -77,6 +77,11 @@ describe('Integration test', () => {
         expect(campaignFound).toBeNull()
     })
 
+    test('Should check campaign from id', async () => {
+        const campaignFound = await campaignRepository.check({ id })
+        expect(campaignFound).toBeTruthy()
+    })
+
     test('It should update an campaign', async () => {
         const input = {
             name: `name ${randomUUID()}`,
