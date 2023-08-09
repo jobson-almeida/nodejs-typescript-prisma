@@ -27,7 +27,7 @@ describe('Integration test', () => {
         }
     })
 
-    test('It should check, create and list an campaign', async () => {
+    test('It should create and list an campaign', async () => {
         const input = {
             name: `name ${randomUUID()}`,
             text: `text ${randomUUID()}`,
@@ -37,7 +37,7 @@ describe('Integration test', () => {
             status: true
         };
 
-        const newCampaign  = Campaign.create(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)
+        const newCampaign = Campaign.create(input.name, input.text, input.interests, input.startTime, input.endTime, input.status)
         await campaignRepository.save(newCampaign)
 
         const campaignsFound = await campaignRepository.list()
@@ -56,6 +56,15 @@ describe('Integration test', () => {
         expect(campaign.interests).toBeInstanceOf(Array);
         expect(campaign.createdAt).not.toBeUndefined()
         expect(campaign.updatedAt).not.toBeUndefined()
+    })
+
+    test('Should get campaign from id', async () => {
+        const campaignFound = await campaignRepository.get({ id })
+        expect(campaignFound).not.toBeNull()
+        expect(campaignFound?.name).toEqual(name)
+        expect(campaignFound?.text).toEqual(text)
+        expect(campaignFound?.interests).toEqual(interests)
+        expect(campaignFound?.interests).toHaveLength(1)
     })
 
 })
