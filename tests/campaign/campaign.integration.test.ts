@@ -67,4 +67,8 @@ describe('Integration test', () => {
         expect(campaignFound?.interests).toHaveLength(1)
     })
 
+    test('Should not get campaign from id', async () => {
+        const campaignFound = await campaignRepository.get({ id: randomUUID() })
+        expect(campaignFound).toBeNull()
+    })
 })
