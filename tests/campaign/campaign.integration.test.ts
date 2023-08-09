@@ -71,4 +71,9 @@ describe('Integration test', () => {
         const campaignFound = await campaignRepository.get({ id: randomUUID() })
         expect(campaignFound).toBeNull()
     })
+
+    test('Should not get campaign from invalid id', async () => {
+        const campaignFound = await campaignRepository.get({ id: "1" })
+        expect(campaignFound).toBeNull()
+    })
 })
