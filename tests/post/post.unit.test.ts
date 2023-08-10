@@ -23,4 +23,16 @@ describe("Post unit", () => {
         expect(input.text).toEqual(post.text)
         expect(input.authorId).toEqual(post.authorId)
      })
+
+     test("Should update post", () => {
+        const input = {
+         text: `text ${randomUUID()}`,
+         authorId: `${randomUUID()}`
+        }
+ 
+        post.build(input.text, input.authorId)        
+        expect(input.text).not.toEqual(text)
+        expect(input.authorId).not.toEqual(authorId) 
+     })
+
 })
