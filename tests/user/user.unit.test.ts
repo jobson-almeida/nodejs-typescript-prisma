@@ -1,5 +1,6 @@
 import InvalidEmailError from "@/domain/entities/errors/invalid-email";
 import InvalidObjectError from "@/domain/entities/errors/invalid-object";
+import InvalidUUIDError from "@/domain/entities/errors/invalid-uuid";
 import User from "@/domain/entities/user";
 import { randomUUID } from "crypto";
 import { describe, expect, test } from "vitest";
@@ -58,5 +59,15 @@ describe("User unit", () => {
          }
   
          expect(() => User.create(input.name, input.email, input.interests)).toThrow(new InvalidEmailError())
+        })
+
+        test("Should not create user from invalid interest", () => {
+         const input = {
+          name: `name ${randomUUID()}`,
+          email: `user@email.com`,
+          interests: ["1"]
+         }
+         
+         expect(() => User.create(input.name, input.email, input.interests)).toThrow(new InvalidUUIDError("Invalid interest"))
         })
 })
