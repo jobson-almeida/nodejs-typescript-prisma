@@ -67,6 +67,16 @@ describe("User unit", () => {
           email: `user@email.com`,
           interests: ["1"]
          }
+
+         expect(() => User.create(input.name, input.email, input.interests)).toThrow(new InvalidUUIDError("Invalid interest"))
+        })
+
+        test("Should not create user from empty interest", () => {
+         const input = {
+          name: `name ${randomUUID()}`,
+          email: `user@email.com`,
+          interests: []
+         }
          
          expect(() => User.create(input.name, input.email, input.interests)).toThrow(new InvalidUUIDError("Invalid interest"))
         })
