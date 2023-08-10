@@ -1,3 +1,4 @@
+import InvalidObjectError from "@/domain/entities/errors/invalid-object";
 import User from "@/domain/entities/user";
 import { randomUUID } from "crypto";
 import { describe, expect, test } from "vitest";
@@ -32,9 +33,20 @@ describe("User unit", () => {
          email: `another@email.com`,
          interests: [`${randomUUID()}`]
         }
-        
+
         user.build(input.name, input.email, input.interests) 
         expect(input.name).not.toEqual(name)
         expect(input.email).not.toEqual(email) 
      })
+
+     test("Should not create user from invalid name", () => {
+        const input = {
+         name: "",
+         email: `user@email.com`,
+         interests: [`${randomUUID()}`]
+        }
+ 
+        expect(() => User.create(input.name, input.email, input.interests)).toThrow(new InvalidObjectError("Invalid name field content: set a name"))
+       })
+ 
 })
