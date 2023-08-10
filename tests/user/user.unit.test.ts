@@ -1,3 +1,4 @@
+import InvalidEmailError from "@/domain/entities/errors/invalid-email";
 import InvalidObjectError from "@/domain/entities/errors/invalid-object";
 import User from "@/domain/entities/user";
 import { randomUUID } from "crypto";
@@ -49,4 +50,13 @@ describe("User unit", () => {
         expect(() => User.create(input.name, input.email, input.interests)).toThrow(new InvalidObjectError("Invalid name field content: set a name"))
        })
  
+       test("Should not create user from invalid email", () => {
+         const input = {
+          name: `name ${randomUUID()}`,
+          email: `user@emailcom`,
+          interests: [`${randomUUID()}`]
+         }
+  
+         expect(() => User.create(input.name, input.email, input.interests)).toThrow(new InvalidEmailError())
+        })
 })
