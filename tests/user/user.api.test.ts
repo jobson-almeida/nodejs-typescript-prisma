@@ -68,7 +68,7 @@ describe("API test using axios", () => {
         expect(response.status).toBe(200)
     })
 
-    test('Should delete am user', async () => {
+    test('Should delete an user from id', async () => {
         const responseUser = await axios({
             url: `http://localhost:3000/users/${id}`,
             method: "delete",
@@ -80,7 +80,18 @@ describe("API test using axios", () => {
         expect(responseUser.status).toBe(204)
     });
 
-
+    test('Should not delete an user from id', async () => {
+        const response = await axios({
+            url: 'http://localhost:3000/users/1',
+            method: "delete",
+            responseType: "json",
+            validateStatus: function (status) {
+                return status >= 400 && status <= 500;
+            }, 
+        })
+        expect(response.status).toBe(404)
+    });
+ 
     afterAll(async () => {
         if (idInterest) {
             const removeInterest = await axios({
