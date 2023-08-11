@@ -1,5 +1,5 @@
 import Interest from "@/domain/entities/interest";
-import axios from "axios";
+import axios from "axios";  
 import { randomUUID } from "crypto";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 
@@ -65,6 +65,8 @@ describe("API test using axios", () => {
         })
         const [user] = response.data
         id = user.id
+        email = user.email
+        name = user.name
         expect(response.status).toBe(200)
     })
 
@@ -103,6 +105,22 @@ describe("API test using axios", () => {
         })
         expect(response.status).toBe(200)
     })
+
+    test('Should update an user', async () => {
+        const response = await axios({
+            url: `http://localhost:3000/users/${id}`,
+            method: "put",
+            data: {
+                name: `name ${randomUUID()}`,
+                email: "user@email.com",
+                interests: [`${idInterest}`]
+            },
+            validateStatus: function (status) {
+                return status >= 200 && status < 299;
+            },
+        })
+        expect(response.status).toBe(204)
+    });
 
     test('Should delete an user from id', async () => {
         const responseUser = await axios({
