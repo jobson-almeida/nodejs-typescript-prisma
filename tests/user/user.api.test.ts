@@ -1,5 +1,4 @@
-import Interest from "@/domain/entities/interest";
-import axios from "axios";  
+import axios from "axios";
 import { randomUUID } from "crypto";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 
@@ -148,7 +147,7 @@ describe("API test using axios", () => {
 
     afterAll(async () => {
         if (idInterest) {
-            const removeInterest = await axios({
+            const response = await axios({
                 url: `http://localhost:3000/interests/${idInterest}`,
                 method: "delete",
                 responseType: "json",
@@ -156,7 +155,7 @@ describe("API test using axios", () => {
                     return status >= 200 && status < 299;
                 },
             })
-            expect(removeInterest.status).toBe(204)
+            expect(response.status).toBe(204)
         }
 
     })
