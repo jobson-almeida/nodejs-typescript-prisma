@@ -107,4 +107,29 @@ describe("API test using axios", () => {
         expect(response.status).toBe(204)
     });
 
+    afterAll(async () => {
+        if (idUser) {
+            const deletedUser = await axios({
+                url: `http://localhost:3000/users/${idUser}`,
+                method: "delete",
+                responseType: "json",
+                validateStatus: function (status) {
+                    return status >= 200 && status < 299;
+                },
+            })
+            expect(deletedUser.status).toBe(204)
+        }
+
+        if (idInterest) {
+            const deletedInterest = await axios({
+                url: `http://localhost:3000/interests/${idInterest}`,
+                method: "delete",
+                responseType: "json",
+                validateStatus: function (status) {
+                    return status >= 200 && status < 299;
+                },
+            })
+            expect(deletedInterest.status).toBe(204)
+        }
+    })
 })
