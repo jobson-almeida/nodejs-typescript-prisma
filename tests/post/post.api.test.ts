@@ -136,6 +136,17 @@ describe("API test using axios", () => {
         expect(response.status).toBe(200)
     });
 
+    test('Should not get post from non-existent id', async () => {
+        const response = await axios({
+            url: `http://localhost:3000/posts/${randomUUID()}`,
+            method: "get",
+            validateStatus: function (status) {
+                return status >= 400 && status <= 500;
+            },
+        })
+        expect(response.status).toBe(404)
+    });
+
     test('Should delete post from id', async () => {
         const response = await axios({
             url: `http://localhost:3000/posts/${id}`,
