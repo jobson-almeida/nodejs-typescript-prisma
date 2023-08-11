@@ -42,7 +42,7 @@ export default class Post {
   }
 
   build(text: string, authorId: string) {
-    if (!Util.validateUUID(this.authorId)) throw new InvalidUUIDError("Invalid author field content: set a valid author")
+    if (!Util.validateUUID(authorId)) throw new InvalidUUIDError("Invalid author field content: set a valid author")
     this.text = text
     this.authorId = authorId
   }

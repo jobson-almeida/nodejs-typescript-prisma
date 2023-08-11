@@ -83,7 +83,7 @@ export default class PostRepositoryDatabase implements PostRepository {
     }
   }
 
-  async update(params: { where: { id: string }, data: { text: string } }): Promise<void> {
+  async update(params: { where: { id: string }, data: { text: string, authorId: string } }): Promise<void> {
     try {
       const { where, data } = params
       await this.prismaClientAdapter.prismaClient.post.update({

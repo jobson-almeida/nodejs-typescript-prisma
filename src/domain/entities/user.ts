@@ -30,14 +30,12 @@ export default class User {
     updatedAt?: Date,
   ) {
     if (!posts || posts === undefined) {
-      console.log('a')
-      this.name = name
+       this.name = name
       this.email = email
       this.interests = interests
       this.createdAt = createdAt!
       this.updatedAt = updatedAt!
     } else {
-      console.log('b')
       this.name = name
       this.email = email
       this.interests = interests

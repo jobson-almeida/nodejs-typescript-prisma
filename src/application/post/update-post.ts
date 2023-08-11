@@ -29,9 +29,9 @@ export default class UpdatePost {
     if (!postFound) throw new NotFoundError("Post not found")
     const authorFound = await this.userRepository.check({ id: authorId })
     if (!authorFound) throw new NotFoundError("Author not found")
-    
+
     postFound.build(text, authorId)
-    const post = {text: postFound.text, authorId: postFound.authorId}
+    const post = {text: postFound.text, authorId: postFound.author.id}
 
     await this.postRepository.update({
       where: params.where,
