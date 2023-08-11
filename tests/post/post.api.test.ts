@@ -92,11 +92,19 @@ describe("API test using axios", () => {
         })
         const [post] = response.data
         id = post.id
-        text = post.text
-
-        console.log(post)
-        
+        text = post.text      
         expect(response.status).toBe(200)
+    });
+
+    test('Should delete post from id', async () => {
+        const response = await axios({
+            url: `http://localhost:3000/posts/${id}`,
+            method: "delete",
+            validateStatus: function (status) {
+                return status >= 200 && status < 299;
+            },
+        })
+        expect(response.status).toBe(204)
     });
 
 })
