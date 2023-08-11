@@ -81,7 +81,7 @@ describe("API test using axios", () => {
         expect(response.status).toBe(201)
     });
 
-    test('Should not create an post from invalid author id', async () => {
+    test('Should not create an post from invalid or non-existent author id', async () => {
         const response = await axios({
             url: "http://localhost:3000/posts/",
             method: "post",
@@ -95,7 +95,6 @@ describe("API test using axios", () => {
         })
         expect(response.status).toBe(404)
     });
-
 
     test('Should get posts', async () => {
         const response = await axios({
