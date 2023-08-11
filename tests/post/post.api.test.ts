@@ -96,6 +96,21 @@ describe("API test using axios", () => {
         expect(response.status).toBe(404)
     });
 
+    test('Should not create an post from invalid format name', async () => {
+        const response = await axios({
+            url: "http://localhost:3000/posts/",
+            method: "post",
+            data: {
+                text: "",
+                authorId: idUser
+            },
+            validateStatus: function (status) {
+                return status >= 400 && status <= 500;
+            },
+        })
+        expect(response.status).toBe(400)
+    });
+
     test('Should get posts', async () => {
         const response = await axios({
             url: "http://localhost:3000/posts/",
