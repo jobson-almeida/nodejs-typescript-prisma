@@ -82,6 +82,21 @@ describe("API test using axios", () => {
         expect(response.status).toBe(201)
     });
 
+    test('Should get posts', async () => {
+        const response = await axios({
+            url: "http://localhost:3000/posts/",
+            method: "get",
+            validateStatus: function (status) {
+                return status >= 200 && status < 299;
+            },
+        })
+        const [post] = response.data
+        id = post.id
+        text = post.text
 
+        console.log(post)
+        
+        expect(response.status).toBe(200)
+    });
 
 })
