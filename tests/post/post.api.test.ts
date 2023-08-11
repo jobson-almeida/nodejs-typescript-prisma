@@ -158,6 +158,17 @@ describe("API test using axios", () => {
         expect(response.status).toBe(204)
     });
 
+    test('Should not delete post from non-existent id', async () => {
+        const response = await axios({
+            url: `http://localhost:3000/posts/${randomUUID()}`,
+            method: "delete",
+            validateStatus: function (status) {
+                return status >= 400 && status <= 500;
+            },
+        })
+        expect(response.status).toBe(404)
+    });
+
     afterAll(async () => {
         if (idUser) {
             const deletedUser = await axios({
