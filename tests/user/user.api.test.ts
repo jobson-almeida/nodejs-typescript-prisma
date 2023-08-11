@@ -80,6 +80,18 @@ describe("API test using axios", () => {
         expect(response.status).toBe(200)
     })
 
+    test('Should not get user from id', async () => {
+        const response = await axios({
+            url: `http://localhost:3000/users/${randomUUID()}`,
+            method: "get",
+            responseType: "json",
+            validateStatus: function (status) {
+                return status >= 400 && status <= 500;
+            },
+        })
+        expect(response.status).toBe(404)
+    })
+
     test('Should get an user from email', async () => {
         const response = await axios({
             url: `http://localhost:3000/users/${email}`,
@@ -111,11 +123,11 @@ describe("API test using axios", () => {
             responseType: "json",
             validateStatus: function (status) {
                 return status >= 400 && status <= 500;
-            }, 
+            },
         })
         expect(response.status).toBe(404)
     });
- 
+
     afterAll(async () => {
         if (idInterest) {
             const removeInterest = await axios({
