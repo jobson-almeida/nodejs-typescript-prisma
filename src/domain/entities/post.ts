@@ -27,23 +27,23 @@ export default class Post {
     updatedAt?: Date,
     author?: User | undefined | null
   ) {
-    this.text = text
+    this.text = text.trim()
     this.authorId = authorId!
     this.createdAt = createdAt!
     this.updatedAt = updatedAt!
     this.author = author!
+
+    if (!Util.validateUUID(this.authorId)) throw new InvalidObjectError("Invalid author field content: set a valid author")
+    if (!Util.validateString(this.text)) throw new InvalidObjectError("Invalid text field content: set a text")
   }
 
   static create(text: string, authorId: string) {
-    if (!Util.validateUUID(authorId)) throw new InvalidUUIDError("Invalid author field content: set a valid author")
-    if (!text) throw new InvalidObjectError("Invalid text field content: set a text")
     const postId = crypto.randomUUID()
-    return new Post(postId, text, authorId)
+    return new Post(postId, text.trim(), authorId)
   }
 
   build(text: string, authorId: string) {
-    if (!Util.validateUUID(authorId)) throw new InvalidUUIDError("Invalid author field content: set a valid author")
-    this.text = text
+    this.text = text.trim()
     this.authorId = authorId
   }
 }

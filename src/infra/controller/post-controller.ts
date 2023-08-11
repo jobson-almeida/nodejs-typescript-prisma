@@ -32,7 +32,7 @@ export default class PostController {
         await savePost.execute(body);
         return status.created()
       } catch (error) {
-        if (error instanceof Error) { 
+        if (error instanceof Error) {
           if (error instanceof InvalidObjectError) return status.badRequest(error)
           if (error instanceof NotFoundError) return status.notFound(error)
           if (error instanceof Error) return status.internalServerError()

@@ -21,9 +21,9 @@ export default class SavePost {
 
   async execute(data: Input): Promise<void> {
     const { text, authorId} = data
+    const post = Post.create(text, authorId)
     const authorFound = await this.userRepository.check({ id: authorId })
     if (!authorFound) throw new NotFoundError("Author not found")
-    const post = Post.create(text, authorId)
     await this.postRepository.save(post)
   }
 }
