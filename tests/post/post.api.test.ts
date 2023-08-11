@@ -65,8 +65,7 @@ describe("API test using axios", () => {
             idUser = user.id
         }
     })
-
-    //---------
+ 
     test('Should create an post', async () => {
         const response = await axios({
             url: "http://localhost:3000/posts/",
@@ -81,6 +80,22 @@ describe("API test using axios", () => {
         })
         expect(response.status).toBe(201)
     });
+
+    test('Should not create an post from invalid author id', async () => {
+        const response = await axios({
+            url: "http://localhost:3000/posts/",
+            method: "post",
+            data: {
+                text: `text ${randomUUID()}`,
+                authorId: randomUUID()
+            },
+            validateStatus: function (status) {
+                return status >= 400 && status <= 500;
+            },
+        })
+        expect(response.status).toBe(404)
+    });
+
 
     test('Should get posts', async () => {
         const response = await axios({
