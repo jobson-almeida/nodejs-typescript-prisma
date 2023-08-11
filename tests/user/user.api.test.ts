@@ -80,6 +80,18 @@ describe("API test using axios", () => {
         expect(response.status).toBe(200)
     })
 
+    test('Should get an user from email', async () => {
+        const response = await axios({
+            url: `http://localhost:3000/users/${email}`,
+            method: "get",
+            responseType: "json",
+            validateStatus: function (status) {
+                return status >= 200 && status < 299;
+            },
+        })
+        expect(response.status).toBe(200)
+    })
+
     test('Should delete an user from id', async () => {
         const responseUser = await axios({
             url: `http://localhost:3000/users/${id}`,
