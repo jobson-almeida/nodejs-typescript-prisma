@@ -125,6 +125,17 @@ describe("API test using axios", () => {
         expect(response.status).toBe(200)
     });
 
+    test('Should get post from id', async () => {
+        const response = await axios({
+            url: `http://localhost:3000/posts/${id}`,
+            method: "get",
+            validateStatus: function (status) {
+                return status >= 200 && status < 299;
+            },
+        })
+        expect(response.status).toBe(200)
+    });
+
     test('Should delete post from id', async () => {
         const response = await axios({
             url: `http://localhost:3000/posts/${id}`,
