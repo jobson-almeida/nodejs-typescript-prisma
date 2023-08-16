@@ -32,8 +32,8 @@ export default class Post {
     this.createdAt = createdAt!
     this.updatedAt = updatedAt!
     this.author = author!
-
-    if (!Util.validateUUID(this.authorId)) throw new InvalidObjectError("Invalid author field content: set a valid author")
+ 
+    if (Util.validateUUID(this.authorId)) throw new InvalidObjectError("Invalid author field content: set a valid author")
     if (!Util.validateString(this.text)) throw new InvalidObjectError("Invalid text field content: set a text")
   }
 
