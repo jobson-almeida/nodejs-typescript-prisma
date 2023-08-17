@@ -91,7 +91,7 @@ describe("API test using axios", () => {
             },
         })
         expect(response.status).toBe(404)
-    })
+    }) 
 
     test('Should get an user from email', async () => {
         const response = await axios({
@@ -144,7 +144,7 @@ describe("API test using axios", () => {
         })
         expect(response.status).toBe(404)
     });
-
+ 
     afterAll(async () => {
         if (idInterest) {
             const response = await axios({
@@ -157,7 +157,7 @@ describe("API test using axios", () => {
             })
             expect(response.status).toBe(204)
         }
-
+ 
     })
 
 })
