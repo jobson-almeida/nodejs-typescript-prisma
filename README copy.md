@@ -1,9 +1,12 @@
 ## Description
 
 Estudo Nodejs, Typescript e Prisma com práticas de Clean Architecture  
+
 &nbsp;
 
-### Linguagens e Ferramentas 
+## Linguagens e Ferramentas
+
+&nbsp;
 
 <p>
   <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer">
@@ -42,31 +45,31 @@ Estudo Nodejs, Typescript e Prisma com práticas de Clean Architecture
  
 &nbsp;
 
-### Instalação e execução do projeto
+## Instalação e execução do projeto
 
-```dosini
-docker-compose up
+```javascript
+# docker-compose up
 ```
 
 &nbsp;
 
-### Execução dos testes
+## Execução dos testes
 
-```dosini
-docker compose exec application bash
-npm run test
+```javascript
+# docker compose exec application bash
+
+# npm run test
 ```
 
 &nbsp;
 
-### Documentação da API
+## Documentação
 
-```dosini
-http://localhost:4000/api-docs
-```
+[http://localhost:4000/api-docs/](http://localhost:4000/api-docs/)
+
 
 &nbsp;
-&nbsp;
+
 
 ---
 
