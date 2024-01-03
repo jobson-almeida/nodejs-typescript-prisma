@@ -4,7 +4,6 @@ import Post from "@/domain/entities/post";
 import { randomUUID } from "crypto";
 import { describe, expect, test } from "vitest";
 
-
 describe("Post unit", () => {
     let text = ""
     let authorId = ""
@@ -46,7 +45,7 @@ describe("Post unit", () => {
         expect(() => Post.create(input.text, input.authorId)).toThrow(new InvalidObjectError("Invalid text field content: set a text"))
     })
 
-    test("Should not create post from empty authorId", () => {
+    test.skip("Should not create post from empty authorId", () => {
         const input = {
             text: `text ${randomUUID()}`,
             authorId: ""

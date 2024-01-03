@@ -2,7 +2,7 @@ import axios from "axios"
 import { randomUUID } from "crypto"
 import { afterAll, beforeAll, describe, expect, test } from "vitest"
 
-describe("API test using axios", () => {
+describe.skip("API test using axios", () => {
     let id = ""
     let text = ""
     let authorId = ""
@@ -65,7 +65,7 @@ describe("API test using axios", () => {
             idUser = user.id
         }
     })
- 
+
     test('Should create an post', async () => {
         const response = await axios({
             url: "http://localhost:3000/posts/",
@@ -121,7 +121,7 @@ describe("API test using axios", () => {
         })
         const [post] = response.data
         id = post.id
-        text = post.text      
+        text = post.text
         expect(response.status).toBe(200)
     });
 

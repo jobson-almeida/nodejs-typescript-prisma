@@ -1,7 +1,7 @@
 import InvalidObjectError from "./errors/invalid-object";
-import InvalidUUIDError from "./errors/invalid-uuid";
 import crypto from "crypto";
 import Util from "./util";
+import InvalidUUIDError from "./errors/invalid-uuid";
 
 type User = {
   id: string
@@ -32,18 +32,19 @@ export default class Post {
     this.createdAt = createdAt!
     this.updatedAt = updatedAt!
     this.author = author!
- 
-    if (Util.validateUUID(this.authorId)) throw new InvalidObjectError("Invalid author field content: set a valid author")
-    if (!Util.validateString(this.text)) throw new InvalidObjectError("Invalid text field content: set a text")
   }
 
   static create(text: string, authorId: string) {
+    if (!Util.validateString(text.trim())) throw new InvalidObjectError("Invalid text field content: set a text")
+    if (!Util.validateUUID(authorId)) throw new InvalidUUIDError("Invalid author field content: set a valid author")
     const postId = crypto.randomUUID()
     return new Post(postId, text.trim(), authorId)
   }
 
   build(text: string, authorId: string) {
-    this.text = text.trim()
+    if (!Util.validateString(text)) throw new InvalidObjectError("Invalid text field content: set a text")
+    if (!Util.validateUUID(authorId)) throw new InvalidUUIDError("Invalid author field content: set a valid author")
+    this.text = text
     this.authorId = authorId
   }
 }
