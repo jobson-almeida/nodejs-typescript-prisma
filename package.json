@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "start": "tsnd --inspect --respawn --transpile-only --ignore-watch node_modules --exit-child src/index.ts",
     "test": "vitest ./tests"

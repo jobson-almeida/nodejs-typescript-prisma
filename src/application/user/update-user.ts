@@ -29,8 +29,9 @@ export default class UpdateUser {
   async execute(params: { where: WhereUniqueInput, data: UpdateInput }): Promise<void> {
     const { id } = params.where
     const { name, email, interests } = params.data
-    const userFoundFromId = await this.userRepository.get({id})
-    const userFoundFromEmail = await this.userRepository.get({email})
+    const userFoundFromId = await this.userRepository.get({ id })
+    if (!userFoundFromId) throw new NotFoundError("User not found")
+    const userFoundFromEmail = await this.userRepository.get({ email })
     if (userFoundFromEmail?.email === email && userFoundFromEmail?.id !== id) throw new EmailExistsError()
     if (userFoundFromEmail?.interests && userFoundFromEmail?.interests.length > 0) {
       for (let id of userFoundFromEmail.interests) {
@@ -39,14 +40,14 @@ export default class UpdateUser {
         if (interestFound.active === false) throw new InactiveInterestError()
       }
     }
-    
+
     userFoundFromId &&
-      userFoundFromId.build(name, email, interests) 
-      const user = { 
-        name: userFoundFromId?.name,
-        email: userFoundFromId?.email,
-        interests: userFoundFromId?.interests
-      }
-      await this.userRepository.update({ where: params.where, data: user })
+      userFoundFromId.build(name, email, interests)
+    const user = {
+      name: userFoundFromId?.name,
+      email: userFoundFromId?.email,
+      interests: userFoundFromId?.interests
+    }
+    await this.userRepository.update({ where: params.where, data: user })
   }
 }
