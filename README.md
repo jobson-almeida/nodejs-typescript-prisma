@@ -14,6 +14,10 @@ Estudo Nodejs, Typescript e Prisma com práticas de Clean Architecture
     <img src="https://cdn.worldvectorlogo.com/logos/prisma-3.svg" alt="prisma" title="prisma" width="40" height="40" />
   </a>
   &nbsp;
+  <a href="https://www.postgresql.org/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-plain.svg" alt="postgres" title="postgres" width="40" height="40" />
+  </a>
+  &nbsp;
   <a href="https://www.docker.com/" target="_blank" rel="noreferrer">
     <img src="https://cdn.worldvectorlogo.com/logos/docker-4.svg" alt="docker" title="docker" width="40" height="40" />
   </a>
@@ -45,7 +49,7 @@ Estudo Nodejs, Typescript e Prisma com práticas de Clean Architecture
 ### Instalação e execução do projeto
 
 ```dosini
-docker-compose up
+docker compose up
 ```
 
 &nbsp;
