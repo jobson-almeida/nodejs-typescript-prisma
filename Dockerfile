@@ -1,9 +1,10 @@
 FROM node:20-slim
 
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
     openssl
 
-RUN npm install -g npm@9.8.1
+RUN npm install -g npm@latest
+RUN npm install -g npm-check-updates
 
 USER node
 
